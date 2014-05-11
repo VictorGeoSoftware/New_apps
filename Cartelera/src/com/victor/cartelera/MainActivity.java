@@ -1,0 +1,551 @@
+package com.victor.cartelera;
+
+import java.util.ArrayList;
+import java.util.Locale;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
+import com.victor.cartelera.HttpRequest.HttpRequestException;
+
+public class MainActivity extends ActionBarActivity 
+{
+	//----- DECLARACION DE VARIABLES
+	private static final int SELECTED_FILM_DIALOG = 100;
+	BeanFindFilms[] beanFilmsFounded;
+	int numberFilms = 0;
+	String lblOriginalTitle = "";
+	String lblPremiereDay = "";
+	String lblDescription = "";
+	String lblUnavaliable = "";
+	String lblNextFilms = "";
+	String lblFoundedFilms = "";
+		//----- Data selected film
+	int idFilm = 0;
+	String apiWeb = "https://api.themoviedb.org/3";
+	String apiKey = "2ee24d57cde7770db40b27c27759bdfd";
+	String pathSelectedFilm = "";
+	String titleSelectedFilm = "";
+	String originalTitleSelectedFilm = "";
+	String premiereSelectedFilm = "";
+	String descriptionSelectedFilm = "";
+		//----- Sidebar
+	private CharSequence mTitle;
+	private CharSequence mDrawerTitle;
+	private String[] mPlanetTitles;
+	
+	
+	//----- DECLARACION DE ELEMENTOS
+	Button btnBuscar;
+	EditText txtTituloPelicula;
+	ListView lstFoundedFilms;
+	TextView txtListTitle;
+		//----- Selected film dialog elements
+	ImageView dialogImageView;
+	TextView txtDialogTitle;
+	TextView txtDialogOriginalTitle;
+	TextView txtDialogPremiereDay;
+	TextView txtDialogDescription;
+		//----- Sidebar
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private ActionBarDrawerToggle mDrawerToggle;
+
+
+	
+	
+	
+    @Override
+    protected void onCreate(Bundle savedInstanceState) 
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        
+        //----- INICIALIZACION DE ELEMENTOS
+        btnBuscar = (Button)findViewById(R.id.button1);
+        txtTituloPelicula = (EditText)findViewById(R.id.editText1);
+        lstFoundedFilms = (ListView)findViewById(R.id.listView1);
+        txtListTitle= (TextView)findViewById(R.id.textView3);
+        
+        	//----- INCIALIZACION DEL SIDEBAR
+        mTitle = mDrawerTitle = getTitle();
+        mPlanetTitles = getResources().getStringArray(R.array.menu_array);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        
+        ArrayAdapter<String> adaptador = new ArrayAdapter<String>(getApplicationContext(), R.layout.drawer_list_item, mPlanetTitles);
+        Log.i("on create", "valores de entrada: " + mPlanetTitles.length + " " + R.layout.drawer_list_item + " " + adaptador.getCount());
+        
+//        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mPlanetTitles));
+        mDrawerList.setAdapter(adaptador);
+        
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, 
+        		R.drawable.ic_launcher, R.string.drawer_open, R.string.drawer_close)
+		        {
+		        	public void onDrawerClosed(View view)
+		        	{
+		        		super.onDrawerClosed(view);
+		        		getActionBar().setTitle(mTitle);
+		        		invalidateOptionsMenu();
+		        	}
+		        	
+		        	@Override
+		        	public void onDrawerOpened(View drawerView) 
+		        	{
+		        		super.onDrawerOpened(drawerView);
+		        		getActionBar().setTitle(mDrawerTitle);
+		        		invalidateOptionsMenu();
+		        	}
+		        };
+        
+		        mDrawerLayout.setDrawerListener(mDrawerToggle);
+		        if (savedInstanceState == null) {
+		            selectItem(0);
+		        }
+		        
+
+        
+        
+        //----- INICIALIZACION DE LITERALES
+        lblOriginalTitle = getResources().getString(R.string.titulo_original);
+        lblPremiereDay = getResources().getString(R.string.fecha_estreno);
+        lblDescription = getResources().getString(R.string.descripcion);
+        lblUnavaliable = getResources().getString(R.string.no_disponible);
+        lblFoundedFilms = getResources().getString(R.string.lista_peliculas_encontradas);
+        lblNextFilms = getResources().getString(R.string.proximos_lanzamientos);
+        
+        
+        //----- INICIALIZACION DE CONTENIDOS
+        if(lstFoundedFilms.getCount() < 1)
+        {
+        	txtListTitle.setText(lblNextFilms);
+			String url = String.format(apiWeb + "/discover/movie?&api_key=" + apiKey + "&release_date.gte=2014-01-01&release_date.lte=2014-12-30&sort_by=release_date.desc");
+			new LoadFilmTask().execute(url);
+        }
+        else
+        {
+        	txtListTitle.setText(lblFoundedFilms);
+        }
+        
+        
+        
+        //----- PROGRAMACION DE EVENTOS
+        btnBuscar.setOnClickListener(new View.OnClickListener()
+        {			
+			@Override
+			public void onClick(View v) 
+			{
+				txtListTitle.setText(lblFoundedFilms);
+				String tituloRecogido = txtTituloPelicula.getText().toString();
+				if(!tituloRecogido.contentEquals(""))
+				{
+					String url = String.format(apiWeb + "/search/movie?&sort_by=release_date.desc&query="
+							+ tituloRecogido + "&api_key=" +apiKey + "&language=es&include_image_language=es");
+					new LoadFilmTask().execute(url);
+				}
+			}
+		});
+        
+        lstFoundedFilms.setOnItemClickListener(new OnItemClickListener()
+        {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
+			{
+				pathSelectedFilm = beanFilmsFounded[position].getImagePath();
+				titleSelectedFilm = beanFilmsFounded[position].getTittle();
+			    originalTitleSelectedFilm = beanFilmsFounded[position].getSubTittle();
+				premiereSelectedFilm = beanFilmsFounded[position].getPremiereDay();
+				idFilm = beanFilmsFounded[position].getIdFilm();
+				
+				Log.i("lstFoundFilms", "idFilm: " + idFilm);
+				String url = String.format(apiWeb + "/movie/"+ idFilm +	"?&api_key="+ apiKey +"&language=es");
+				new LoadDescriptionFilmTask().execute(url);
+			}
+		});
+        
+        
+    }
+    
+    
+    private class DrawerItemClickListener implements ListView.OnItemClickListener
+    {
+		@Override
+		public void onItemClick(AdapterView parent, View view, int position, long id) 
+		{
+			selectItem(position);
+		}
+    	
+    }
+  
+    private void selectItem(int position)
+    {
+    	Fragment fragment = new PlanetFragment();
+    	Bundle args = new Bundle();
+    	args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
+    	fragment.setArguments(args);
+    	
+    	FragmentManager fragmentManager = getFragmentManager();
+    	fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+    	
+    	mDrawerList.setItemChecked(position, true);
+    	setTitle(mPlanetTitles[position]);
+    	mDrawerLayout.closeDrawer(mDrawerList);
+    }
+    
+    public void setTitle(CharSequence title)
+    {
+    	mTitle = title;
+    	getActionBar().setTitle(mTitle);
+    }
+    
+    
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) 
+    {
+    	boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+    	menu.findItem(R.id.action_websearch).setVisible(!drawerOpen); //---> aqui va action_webserach
+    	return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    
+  //---------- ASYNC TASK ------------------------------------
+    private class LoadFilmTask extends AsyncTask<String, Long, String>
+    {
+    	ProgressDialog dialog = new ProgressDialog(MainActivity.this);
+
+    	@Override
+    	protected void onPreExecute() 
+    	{
+    		super.onPreExecute();
+    		dialog.setMessage(getResources().getString(R.string.msg_consultando_informacion));
+    		dialog.show();
+    	}
+    	
+		@Override
+		protected String doInBackground(String... url) 
+		{
+			try
+			{
+				return HttpRequest.get(url[0]).accept("application/json").body();
+			}
+			catch(HttpRequestException e)
+			{
+				return null;
+			}
+		}
+    	
+		@Override
+		protected void onPostExecute(String result) 
+		{
+			Log.i("on post execute LoadFilm", "result: " + result);
+			getFoundedFilms(result);
+
+			if(dialog.isShowing())
+			{
+				dialog.dismiss();
+			}
+		}
+    }
+    
+    private class LoadDescriptionFilmTask extends AsyncTask<String, Long, String>
+    {
+    	ProgressDialog dialog = new ProgressDialog(MainActivity.this);
+    	
+    	@Override
+    	protected void onPreExecute() 
+    	{
+    		// TODO Auto-generated method stub
+    		super.onPreExecute();
+    		dialog.setMessage(getResources().getString(R.string.msg_consultando_pelicula));
+    		dialog.show();
+    	}
+    	
+		@Override
+		protected String doInBackground(String... params) 
+		{
+			try
+			{
+				return HttpRequest.get(params[0]).accept("application/json").body();
+			}
+			catch(HttpRequestException e)
+			{
+				return null;
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(String result) 
+		{
+			Log.i("load description", "result: " + result);
+			try 
+			{
+				JSONObject receivedJson = new JSONObject(result);
+				String descriptionReceived = receivedJson.getString("overview");
+				
+				Log.i("on post execute", "description received: " + descriptionReceived);
+				if(descriptionReceived.contentEquals("null"))
+				{
+					descriptionReceived = lblUnavaliable;
+				}
+				
+				showDialog(SELECTED_FILM_DIALOG);
+				
+				String path = pathSelectedFilm.replace("http://image.tmdb.org/t/p/w500", "");
+				Log.i("on post execute", "path selected film: " + pathSelectedFilm + " " + path);
+				if(path.contentEquals("null"))
+				{
+					dialogImageView.setImageDrawable(getResources().getDrawable(R.drawable.no_disponible));
+				}
+				else
+				{
+					Picasso.with(getApplicationContext()).load(pathSelectedFilm).into(dialogImageView);
+				}
+				
+				
+				txtDialogTitle.setText(titleSelectedFilm);
+				txtDialogOriginalTitle.setText(lblOriginalTitle + ": " + originalTitleSelectedFilm);
+				txtDialogPremiereDay.setText(lblPremiereDay + ": " + premiereSelectedFilm);
+				txtDialogDescription.setText(lblDescription + ": " + descriptionReceived);
+
+				if(dialog.isShowing())
+				{
+					dialog.dismiss();
+				}
+			}
+			catch (JSONException e) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+    }
+    
+  //---------- METODOS Y FUNCIONES ------------------------------------
+    public void getFoundedFilms(String result)
+    {
+    	try 
+    	{	
+    		String apiPath = "http://image.tmdb.org/t/p/w500";
+    		
+			JSONObject receivedJson = new JSONObject(result);
+			numberFilms = receivedJson.getInt("total_results");
+			JSONArray jArrayResults = receivedJson.getJSONArray("results");
+
+			ArrayList<String> adultValues = getJsonElements(jArrayResults, "adult");
+			ArrayList<String> idValues = getJsonElements(jArrayResults, "id");
+			ArrayList<String> titleValues = getJsonElements(jArrayResults, "title");
+			ArrayList<String> originaltitleValues = getJsonElements(jArrayResults, "original_title");
+			ArrayList<String> dateValues = getJsonElements(jArrayResults, "release_date");
+			ArrayList<String> posterPathValues = getJsonElements(jArrayResults, "poster_path");
+			
+			beanFilmsFounded = new BeanFindFilms[adultValues.size()];
+			for(int i = 0; i < adultValues.size(); i++)
+			{
+				int id = Integer.parseInt(idValues.get(i));
+				String title = titleValues.get(i);
+				String subTitle = originaltitleValues.get(i);
+				String premiereDay = formatDate(dateValues.get(i));
+				String posterPath = apiPath + posterPathValues.get(i);
+				Log.i("get founded films", "idFiml on get founded: " + id);
+				beanFilmsFounded[i] = new BeanFindFilms(id, posterPath, title, subTitle, premiereDay);
+			}
+			
+			Log.i("on post execute", "elements: " + adultValues.size() + " " + idValues.size() + " " + titleValues.size() + " "
+					+ originaltitleValues.size()+ " " + dateValues.size() + " " + posterPathValues.size());
+			
+			
+			FilmListAdapter adapter = new FilmListAdapter(this);
+			lstFoundedFilms.setAdapter(adapter);
+		}
+    	catch (JSONException e) 
+    	{
+    		Toast.makeText(getApplicationContext(), getResources().getString(R.string.msg_no_pelicula), Toast.LENGTH_SHORT).show();
+			e.printStackTrace();
+		}
+    }
+    
+    public String formatDate(String dateUnformatted)
+    {
+    	String dateFormatted = "";
+    	
+    	if(dateUnformatted.length() > 0)
+    	{
+	    	String[] unformattedDateValues = dateUnformatted.split("-");
+	    	String day = unformattedDateValues[2];
+	    	String month = unformattedDateValues[1];
+	    	String year = unformattedDateValues[0];
+	    	
+	    	dateFormatted = day + "-"+ month+ "-" + year;
+    	}
+    	
+    	return dateFormatted;
+    }
+    
+        
+    public ArrayList<String> getJsonElements(JSONArray jsonArray, String objectName)
+    {
+    	ArrayList<String> foundedElements = new ArrayList<String>();
+    	
+    	for(int i = 0; i < jsonArray.length(); i++)
+    	{
+    		try 
+    		{
+				String element = jsonArray.getJSONObject(i).getString(objectName);
+				foundedElements.add(element);
+			}
+    		catch (JSONException e) 
+    		{
+				e.printStackTrace();
+			}
+    	}
+    	
+    	return foundedElements;
+    }
+    
+    class FilmListAdapter extends ArrayAdapter<Object>
+    {
+    	Activity context;
+    	
+		public FilmListAdapter(Activity context) 
+		{
+			super(context, R.layout.adapter_peliculas_encontradas, beanFilmsFounded);
+			this.context = context;
+		}
+		
+		public View getView(int position, View convertView, ViewGroup parent)
+		{
+			LayoutInflater inflater = context.getLayoutInflater();
+			View item = inflater.inflate(R.layout.adapter_peliculas_encontradas, null);
+			
+			ImageView imageView = (ImageView)item.findViewById(R.id.imageView1);
+			TextView txtTitle = (TextView)item.findViewById(R.id.textView1);
+			TextView txtOriginalTitle = (TextView)item.findViewById(R.id.textView2);
+			TextView txtPremiereDay = (TextView)item.findViewById(R.id.textView3);
+			
+			if(beanFilmsFounded[position].getImagePath().replace("http://image.tmdb.org/t/p/w500", "").contentEquals("null"))
+			{
+				imageView.setImageDrawable(getResources().getDrawable(R.drawable.no_disponible));
+			}
+			else
+			{
+				Picasso.with(getApplicationContext()).load(beanFilmsFounded[position].getImagePath()).into(imageView);
+			}
+			
+			txtTitle.setText(beanFilmsFounded[position].getTittle());
+			txtOriginalTitle.setText(lblOriginalTitle + ": " + beanFilmsFounded[position].getSubTittle());
+			txtPremiereDay.setText(lblPremiereDay + ": " + beanFilmsFounded[position].getPremiereDay());
+			
+			return item;
+		}
+    	
+    }
+    
+    public static class PlanetFragment extends Fragment 
+    {
+        public static final String ARG_PLANET_NUMBER = "planet_number";
+
+        public PlanetFragment() {
+            // Empty constructor required for fragment subclasses
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_planet, container, false);
+            int i = getArguments().getInt(ARG_PLANET_NUMBER);
+            String planet = getResources().getStringArray(R.array.menu_array)[i];
+
+            int imageId = getResources().getIdentifier(planet.toLowerCase(Locale.getDefault()),
+                            "drawable", getActivity().getPackageName());
+            ((ImageView) rootView.findViewById(R.id.image)).setImageResource(imageId);
+            getActivity().setTitle(planet);
+            return rootView;
+        }
+    }
+
+    
+    //----------- DIALOGS ----------------------------------------
+    protected Dialog onCreateDialog (int id)
+    {
+    	Dialog windowDialog = null;
+
+    	switch (id)
+    	{
+    		case SELECTED_FILM_DIALOG:
+    			windowDialog = createDialogSelectedFlim();
+    		break;
+    	}
+    	
+		return windowDialog;
+    }
+    
+    private Dialog createDialogSelectedFlim()
+    {
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	LayoutInflater inflater = this.getLayoutInflater();
+    	View layout = inflater.inflate(R.layout.dialog_selected_film, null);
+    	builder.setView(layout);
+    	
+		dialogImageView = (ImageView) layout.findViewById(R.id.imageView1);
+		txtDialogTitle = (TextView) layout.findViewById(R.id.textView1);
+		txtDialogOriginalTitle = (TextView) layout.findViewById(R.id.textView2);
+		txtDialogPremiereDay = (TextView) layout.findViewById(R.id.textView3);
+		txtDialogDescription = (TextView) layout.findViewById(R.id.textView4);
+
+    	
+    	return builder.create();
+    }
+}

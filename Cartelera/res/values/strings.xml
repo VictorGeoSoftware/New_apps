@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Cartelera</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="cartelera">Cartelera</string>
+    <string name="buscar">Buscar</string>
+    <string name="msg_consultando_informacion">Consultando información. Espere, por favor.</string>
+    <string name="msg_consultando_pelicula">Recuperando información de la película. Espere, por favor.</string>
+    <string name="msg_no_pelicula">No se ha encontrado ninguna película con ese título.</string>
+    <string name="buscar_pelicula">Buscar película</string>
+    <string name="introduce_nombre_pelicula">Introduce el nombre de la película</string>
+    <string name="lista_peliculas_encontradas">Lista de películas encontradas</string>
+    <string name="titulo">Título</string>
+    <string name="titulo_original">Título original</string>
+    <string name="fecha_estreno">Día de estreno</string>
+    <string name="descripcion">Descripción</string>
+    <string name="no_disponible">No disponible</string>
+    <string name="proximos_lanzamientos">Próximos lanzamientos</string>
+    <string-array name="menu_array">
+        <item>Acción</item>
+        <item>Drama</item>
+        <item>Comedia</item>
+        <item>Romance</item>
+    </string-array>
+	<string name="drawer_open">Abrir el navegador lateral</string>
+    <string name="drawer_close">Cerrar el navegador lateral</string>
+    <string name="action_websearch">Buscar en la web</string>
+
+</resources>
