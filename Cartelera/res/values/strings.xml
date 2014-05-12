@@ -4,7 +4,6 @@
     <string name="app_name">Cartelera</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="cartelera">Cartelera</string>
     <string name="buscar">Buscar</string>
     <string name="msg_consultando_informacion">Consultando información. Espere, por favor.</string>
     <string name="msg_consultando_pelicula">Recuperando información de la película. Espere, por favor.</string>
