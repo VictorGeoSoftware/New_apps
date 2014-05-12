@@ -113,11 +113,12 @@ public class MainActivity extends ActionBarActivity
     {
     	PlaceholderFragment fragment = new PlaceholderFragment();
     	Bundle args = new Bundle();
+    	Log.i("select item", "postition - select item: " + position);
+    	args.putInt(PlaceholderFragment.MENU_NUMBER, position);
+    	fragment.setArguments(args);
     	
-//    	fragment.setArguments(args);
-//    	
-//    	FragmentManager fragmentManager = getFragmentManager();
-//    	fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+    	FragmentManager fragmentManager = getFragmentManager();
+    	fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
     	
     	mDrawerList.setItemChecked(position, true);
     	setTitle(mPlanetTitles[position]);
@@ -136,6 +137,7 @@ public class MainActivity extends ActionBarActivity
     {
     	boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
     	menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
+    	
     	return super.onPrepareOptionsMenu(menu);
     }
     
@@ -154,11 +156,20 @@ public class MainActivity extends ActionBarActivity
     		return true;
     	}
     	
-        int id = item.getItemId();
-        if (id == R.id.action_settings) 
-        {
-            return true;
-        }
+    	switch (item.getItemId())
+    	{
+    		case R.id.action_settings:
+    			Toast.makeText(getApplicationContext(), getResources().getString(R.string.action_settings), Toast.LENGTH_SHORT).show();
+    		break;
+    		
+			case R.id.action_websearch:
+				Toast.makeText(getApplicationContext(), getResources().getString(R.string.action_websearch), Toast.LENGTH_SHORT).show();
+			break;
+	
+			default:
+			break;
+		}
+    	
         return super.onOptionsItemSelected(item);
     }
     
@@ -168,8 +179,12 @@ public class MainActivity extends ActionBarActivity
      */
     public static class PlaceholderFragment extends Fragment 
     {
+    	public static final String MENU_NUMBER = "menu_number";
+    	
     	Button button;
+    	TextView txtTitle;
     	View rootView;
+    	int numberTitle;
     	
         public PlaceholderFragment() {
         }
@@ -178,8 +193,13 @@ public class MainActivity extends ActionBarActivity
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) 
         {
             rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            txtTitle = (TextView) rootView.findViewById(R.id.textView1);
             button = (Button) rootView.findViewById(R.id.button1);
+            numberTitle = getArguments().getInt(MENU_NUMBER);
+            Log.i("select item", "postition - fragment: " + numberTitle);
             return rootView;
+            
+            
         }
         
         @Override
@@ -187,6 +207,7 @@ public class MainActivity extends ActionBarActivity
         {
         	super.onActivityCreated(savedInstanceState);
         	
+        	txtTitle.setText("option " + numberTitle);
         	button.setOnClickListener(new OnClickListener()
         	{
 				@Override
