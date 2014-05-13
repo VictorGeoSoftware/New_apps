@@ -8,7 +8,7 @@
         android:id="@+id/imageView1"
         android:layout_width="63dip"
         android:layout_height="96dip"
-        android:contentDescription="@string/cartelera"
+        android:contentDescription="@string/app_name"
         android:src="@drawable/ic_launcher" />
 
     <LinearLayout

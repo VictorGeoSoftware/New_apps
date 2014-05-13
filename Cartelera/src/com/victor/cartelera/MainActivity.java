@@ -15,6 +15,7 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -29,6 +30,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
+import android.webkit.WebChromeClient.CustomViewCallback;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -42,21 +44,16 @@ import android.widget.Toast;
 public class MainActivity extends ActionBarActivity 
 {
 	//----- VIEW ELEMENTS
+	
 		//----- Sidebar
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
 
-	
-	
-	
-	
-	//----- VARIABLES
-	private static final int SELECTED_FILM_DIALOG = 100;
-	BeanFindFilms[] beanFilmsFounded;
-	int numberFilms = 0;
-	String lblOriginalTitle = "";
-	String lblPremiereDay = "";
+
+	 //----- VARIABLES
+    static String lblOriginalTitle = "";
+	static String lblPremiereDay = "";
 	String lblDescription = "";
 	String lblUnavaliable = "";
 	String lblNextFilms = "";
@@ -65,8 +62,7 @@ public class MainActivity extends ActionBarActivity
 	private CharSequence mTitle;
 	private CharSequence mDrawerTitle;
 	private String[] mPlanetTitles;
-	String apiWeb = "https://api.themoviedb.org/3";
-	String apiKey = "2ee24d57cde7770db40b27c27759bdfd";
+
 	
 	
 	
@@ -204,184 +200,37 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
     
-    
-    
-  //---------- ASYNC TASK ------------------------------------
-    private class LoadFilmTask extends AsyncTask<String, Long, String>
-    {
-    	ProgressDialog dialog = new ProgressDialog(MainActivity.this);
-
-    	@Override
-    	protected void onPreExecute() 
-    	{
-    		super.onPreExecute();
-    		dialog.setMessage(getResources().getString(R.string.msg_consultando_informacion));
-    		dialog.show();
-    	}
-    	
-		@Override
-		protected String doInBackground(String... url) 
-		{
-			try
-			{
-				return HttpRequest.get(url[0]).accept("application/json").body();
-			}
-			catch(HttpRequestException e)
-			{
-				return null;
-			}
-		}
-    	
-		@Override
-		protected void onPostExecute(String result) 
-		{
-			Log.i("on post execute LoadFilm", "result: " + result);
-			getFoundedFilms(result);
-
-			if(dialog.isShowing())
-			{
-				dialog.dismiss();
-			}
-		}
-    }
-    
 
     
-  //---------- METODOS Y FUNCIONES ------------------------------------
-    public void getFoundedFilms(String result)
-    {
-    	try 
-    	{	
-    		String apiPath = "http://image.tmdb.org/t/p/w500";
-    		
-			JSONObject receivedJson = new JSONObject(result);
-			numberFilms = receivedJson.getInt("total_results");
-			JSONArray jArrayResults = receivedJson.getJSONArray("results");
-
-			ArrayList<String> adultValues = getJsonElements(jArrayResults, "adult");
-			ArrayList<String> idValues = getJsonElements(jArrayResults, "id");
-			ArrayList<String> titleValues = getJsonElements(jArrayResults, "title");
-			ArrayList<String> originaltitleValues = getJsonElements(jArrayResults, "original_title");
-			ArrayList<String> dateValues = getJsonElements(jArrayResults, "release_date");
-			ArrayList<String> posterPathValues = getJsonElements(jArrayResults, "poster_path");
-			
-			beanFilmsFounded = new BeanFindFilms[adultValues.size()];
-			for(int i = 0; i < adultValues.size(); i++)
-			{
-				int id = Integer.parseInt(idValues.get(i));
-				String title = titleValues.get(i);
-				String subTitle = originaltitleValues.get(i);
-				String premiereDay = formatDate(dateValues.get(i));
-				String posterPath = apiPath + posterPathValues.get(i);
-				Log.i("get founded films", "idFiml on get founded: " + id);
-				beanFilmsFounded[i] = new BeanFindFilms(id, posterPath, title, subTitle, premiereDay);
-			}
-			
-			Log.i("on post execute", "elements: " + adultValues.size() + " " + idValues.size() + " " + titleValues.size() + " "
-					+ originaltitleValues.size()+ " " + dateValues.size() + " " + posterPathValues.size());
-			
-			
-			FilmListAdapter adapter = new FilmListAdapter(this);
-			lstFoundedFilms.setAdapter(adapter);
-		}
-    	catch (JSONException e) 
-    	{
-    		Toast.makeText(getApplicationContext(), getResources().getString(R.string.msg_no_pelicula), Toast.LENGTH_SHORT).show();
-			e.printStackTrace();
-		}
-    }
-    
-    public String formatDate(String dateUnformatted)
-    {
-    	String dateFormatted = "";
-    	
-    	if(dateUnformatted.length() > 0)
-    	{
-	    	String[] unformattedDateValues = dateUnformatted.split("-");
-	    	String day = unformattedDateValues[2];
-	    	String month = unformattedDateValues[1];
-	    	String year = unformattedDateValues[0];
-	    	
-	    	dateFormatted = day + "-"+ month+ "-" + year;
-    	}
-    	
-    	return dateFormatted;
-    }
-    
-        
-    public ArrayList<String> getJsonElements(JSONArray jsonArray, String objectName)
-    {
-    	ArrayList<String> foundedElements = new ArrayList<String>();
-    	
-    	for(int i = 0; i < jsonArray.length(); i++)
-    	{
-    		try 
-    		{
-				String element = jsonArray.getJSONObject(i).getString(objectName);
-				foundedElements.add(element);
-			}
-    		catch (JSONException e) 
-    		{
-				e.printStackTrace();
-			}
-    	}
-    	
-    	return foundedElements;
-    }
-    
-    class FilmListAdapter extends ArrayAdapter<Object>
-    {
-    	Activity context;
-    	
-		public FilmListAdapter(Activity context) 
-		{
-			super(context, R.layout.adapter_peliculas_encontradas, beanFilmsFounded);
-			this.context = context;
-		}
-		
-		public View getView(int position, View convertView, ViewGroup parent)
-		{
-			LayoutInflater inflater = context.getLayoutInflater();
-			View item = inflater.inflate(R.layout.adapter_peliculas_encontradas, null);
-			
-			ImageView imageView = (ImageView)item.findViewById(R.id.imageView1);
-			TextView txtTitle = (TextView)item.findViewById(R.id.textView1);
-			TextView txtOriginalTitle = (TextView)item.findViewById(R.id.textView2);
-			TextView txtPremiereDay = (TextView)item.findViewById(R.id.textView3);
-			
-			if(beanFilmsFounded[position].getImagePath().replace("http://image.tmdb.org/t/p/w500", "").contentEquals("null"))
-			{
-				imageView.setImageDrawable(getResources().getDrawable(R.drawable.no_disponible));
-			}
-			else
-			{
-				Picasso.with(getApplicationContext()).load(beanFilmsFounded[position].getImagePath()).into(imageView);
-			}
-			
-			txtTitle.setText(beanFilmsFounded[position].getTittle());
-			txtOriginalTitle.setText(lblOriginalTitle + ": " + beanFilmsFounded[position].getSubTittle());
-			txtPremiereDay.setText(lblPremiereDay + ": " + beanFilmsFounded[position].getPremiereDay());
-			
-			return item;
-		}
-    	
-    }
-    
-
     /**
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment 
     {
     	public static final String MENU_NUMBER = "menu_number";
+    	private static final int SELECTED_FILM_DIALOG = 100;
+    	
     	int option = 0;
+    	int numberFilms = 0;
+    	String apiWeb = "https://api.themoviedb.org/3";
+    	String apiKey = "2ee24d57cde7770db40b27c27759bdfd";    	
+    	BeanFindFilms[] beanFilmsFounded;
+		//----- GENRES ID
+    	private static final int ACTION_ID = 28;
+    	private static final int COMEDY_ID = 35;
+    	private static final int DRAMA_ID = 18;
+    	private static final int ROMANCE_ID = 10749;
     	
     	//----- Elements declaration
     	View rootView;
-    	//----- Main fragment
+    		//----- Main fragment
     	EditText edtFilmSearch;
     	ImageView imgButtonSearch;
     	ListView lstFoundedFilms;
+    		//----- Adapter
+    	Activity adapterContextActiviy;  //--> Necessary for instantiate activity in custom arrayAdapter
+
+    	
     	
         public PlaceholderFragment() {
         }
@@ -391,7 +240,7 @@ public class MainActivity extends ActionBarActivity
         {
             rootView = inflater.inflate(R.layout.fragment_main, container, false);
             option = getArguments().getInt(MENU_NUMBER);
-
+            adapterContextActiviy = getActivity();
             
             
             //----- Elements init
@@ -408,7 +257,32 @@ public class MainActivity extends ActionBarActivity
         	super.onActivityCreated(savedInstanceState);
         	
         	//----- Initializing API
-        	
+        	String url = "";
+        	switch (option)
+        	{
+	        	case 0:
+	        		url = String.format(apiWeb + "/discover/movie?&api_key=" + apiKey);
+	        	break;
+	        	case 1:
+	        		url = String.format(apiWeb + "/discover/movie?&api_key=" + apiKey + 
+	        				"&with_genres=" + ACTION_ID);
+	        	break;
+	        	case 2:
+	        		url = String.format(apiWeb + "/discover/movie?&api_key=" + apiKey + 
+	        				"&with_genres="  + DRAMA_ID);	        		
+	        	break;
+	        	case 3:
+	        		url = String.format(apiWeb + "/discover/movie?&api_key=" + apiKey + 
+	        				"&with_genres="  + COMEDY_ID);
+	        	break;
+	        	case 4:
+	        		url = String.format(apiWeb + "/discover/movie?&api_key=" + apiKey + 
+	        				"&with_genres="  + ROMANCE_ID);
+	        	break;
+        	}
+        	url = url + "&language=es&release_date.gte=2014-01-01&release_date.lte=2015-01-01&sort_by=release_date.desc";
+			
+			new LoadFilmTask().execute(url);
         	
         	
         	//----- Events for elements
@@ -430,6 +304,168 @@ public class MainActivity extends ActionBarActivity
 					}
 				}
 			});
+        }
+        
+        
+        //---------- ASYNC TASK ------------------------------------
+        private class LoadFilmTask extends AsyncTask<String, Long, String>
+        {
+        	ProgressDialog dialog = new ProgressDialog(getActivity());
+
+        	@Override
+        	protected void onPreExecute() 
+        	{
+        		super.onPreExecute();
+        		dialog.setMessage(getResources().getString(R.string.msg_consultando_informacion));
+        		dialog.show();
+        	}
+        	
+    		@Override
+    		protected String doInBackground(String... url) 
+    		{
+    			try
+    			{
+    				return HttpRequest.get(url[0]).accept("application/json").body();
+    			}
+    			catch(HttpRequestException e)
+    			{
+    				return null;
+    			}
+    		}
+        	
+    		@Override
+    		protected void onPostExecute(String result) 
+    		{
+    			Log.i("on post execute LoadFilm", "result: " + result);
+    			getFoundedFilms(result);
+
+    			if(dialog.isShowing())
+    			{
+    				dialog.dismiss();
+    			}
+    		}
+        }
+        
+
+        
+      //---------- METODOS Y FUNCIONES ------------------------------------
+        public void getFoundedFilms(String result)
+        {
+        	try 
+        	{	
+        		String apiPath = "http://image.tmdb.org/t/p/w500";
+        		
+    			JSONObject receivedJson = new JSONObject(result);
+    			numberFilms = receivedJson.getInt("total_results");
+    			JSONArray jArrayResults = receivedJson.getJSONArray("results");
+
+    			ArrayList<String> adultValues = getJsonElements(jArrayResults, "adult");
+    			ArrayList<String> idValues = getJsonElements(jArrayResults, "id");
+    			ArrayList<String> titleValues = getJsonElements(jArrayResults, "title");
+    			ArrayList<String> originaltitleValues = getJsonElements(jArrayResults, "original_title");
+    			ArrayList<String> dateValues = getJsonElements(jArrayResults, "release_date");
+    			ArrayList<String> posterPathValues = getJsonElements(jArrayResults, "poster_path");
+    			
+    			beanFilmsFounded = new BeanFindFilms[adultValues.size()];
+    			for(int i = 0; i < adultValues.size(); i++)
+    			{
+    				int id = Integer.parseInt(idValues.get(i));
+    				String title = titleValues.get(i);
+    				String subTitle = originaltitleValues.get(i);
+    				String premiereDay = formatDate(dateValues.get(i));
+    				String posterPath = apiPath + posterPathValues.get(i);
+    				Log.i("get founded films", "idFiml on get founded: " + id);
+    				beanFilmsFounded[i] = new BeanFindFilms(id, posterPath, title, subTitle, premiereDay);
+    			}
+    			
+    			
+    			Log.i("on post execute", "elements: " + adultValues.size() + " " + idValues.size() + " " + titleValues.size() + " "
+    					+ originaltitleValues.size()+ " " + dateValues.size() + " " + posterPathValues.size());
+    			
+    			FilmListAdapter adapter = new FilmListAdapter(adapterContextActiviy);
+    			lstFoundedFilms.setAdapter(adapter);
+    		}
+        	catch (JSONException e) 
+        	{
+        		Toast.makeText(getActivity().getApplicationContext(), getResources().getString(R.string.msg_no_pelicula), Toast.LENGTH_SHORT).show();
+    			e.printStackTrace();
+    		}
+        }
+        
+        public String formatDate(String dateUnformatted)
+        {
+        	String dateFormatted = "";
+        	
+        	if(dateUnformatted.length() > 0)
+        	{
+    	    	String[] unformattedDateValues = dateUnformatted.split("-");
+    	    	String day = unformattedDateValues[2];
+    	    	String month = unformattedDateValues[1];
+    	    	String year = unformattedDateValues[0];
+    	    	
+    	    	dateFormatted = day + "-"+ month+ "-" + year;
+        	}
+        	
+        	return dateFormatted;
+        }
+        
+            
+        public ArrayList<String> getJsonElements(JSONArray jsonArray, String objectName)
+        {
+        	ArrayList<String> foundedElements = new ArrayList<String>();
+        	
+        	for(int i = 0; i < jsonArray.length(); i++)
+        	{
+        		try 
+        		{
+    				String element = jsonArray.getJSONObject(i).getString(objectName);
+    				foundedElements.add(element);
+    			}
+        		catch (JSONException e) 
+        		{
+    				e.printStackTrace();
+    			}
+        	}
+        	
+        	return foundedElements;
+        }
+        
+        class FilmListAdapter extends ArrayAdapter<Object>
+        {
+        	Activity context;
+        	
+    		public FilmListAdapter(Activity context) 
+    		{
+    			super(context, R.layout.adapter_peliculas_encontradas, beanFilmsFounded);
+    			this.context = context;
+    		}
+    		
+    		public View getView(int position, View convertView, ViewGroup parent)
+    		{
+    			LayoutInflater inflater = context.getLayoutInflater();
+    			View item = inflater.inflate(R.layout.adapter_peliculas_encontradas, null);
+    			
+    			ImageView imageView = (ImageView)item.findViewById(R.id.imageView1);
+    			TextView txtTitle = (TextView)item.findViewById(R.id.textView1);
+    			TextView txtOriginalTitle = (TextView)item.findViewById(R.id.textView2);
+    			TextView txtPremiereDay = (TextView)item.findViewById(R.id.textView3);
+    			
+    			if(beanFilmsFounded[position].getImagePath().replace("http://image.tmdb.org/t/p/w500", "").contentEquals("null"))
+    			{
+    				imageView.setImageDrawable(getResources().getDrawable(R.drawable.no_disponible));
+    			}
+    			else
+    			{
+    				Picasso.with(getActivity()).load(beanFilmsFounded[position].getImagePath()).into(imageView);
+    			}
+    			
+    			txtTitle.setText(beanFilmsFounded[position].getTittle());
+    			txtOriginalTitle.setText(lblOriginalTitle + ": " + beanFilmsFounded[position].getSubTittle());
+    			txtPremiereDay.setText(lblPremiereDay + ": " + beanFilmsFounded[position].getPremiereDay());
+    			
+    			return item;
+    		}
+        	
         }
 
     }
