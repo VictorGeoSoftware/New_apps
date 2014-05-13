@@ -1,5 +1,14 @@
 package com.victor.cartelera;
 
+import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.squareup.picasso.Picasso;
+import com.victor.cartelera.HttpRequest.HttpRequestException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -18,6 +27,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.AnimationSet;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -31,19 +42,31 @@ import android.widget.Toast;
 public class MainActivity extends ActionBarActivity 
 {
 	//----- VIEW ELEMENTS
-	//----- Sidebar
+		//----- Sidebar
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
+
 	
 	
 	
 	
 	//----- VARIABLES
+	private static final int SELECTED_FILM_DIALOG = 100;
+	BeanFindFilms[] beanFilmsFounded;
+	int numberFilms = 0;
+	String lblOriginalTitle = "";
+	String lblPremiereDay = "";
+	String lblDescription = "";
+	String lblUnavaliable = "";
+	String lblNextFilms = "";
+	String lblFoundedFilms = "";
 		//----- Sidebar
 	private CharSequence mTitle;
 	private CharSequence mDrawerTitle;
 	private String[] mPlanetTitles;
+	String apiWeb = "https://api.themoviedb.org/3";
+	String apiKey = "2ee24d57cde7770db40b27c27759bdfd";
 	
 	
 	
@@ -95,6 +118,15 @@ public class MainActivity extends ActionBarActivity
             selectItem(0);
         }
         
+        //------ INITIALIZING OF STRINGS
+        //----- INICIALIZACION DE LITERALES
+        lblOriginalTitle = getResources().getString(R.string.titulo_original);
+        lblPremiereDay = getResources().getString(R.string.fecha_estreno);
+        lblDescription = getResources().getString(R.string.descripcion);
+        lblUnavaliable = getResources().getString(R.string.no_disponible);
+        lblFoundedFilms = getResources().getString(R.string.lista_peliculas_encontradas);
+        lblNextFilms = getResources().getString(R.string.proximos_lanzamientos);
+        
     }
 
 
@@ -113,7 +145,6 @@ public class MainActivity extends ActionBarActivity
     {
     	PlaceholderFragment fragment = new PlaceholderFragment();
     	Bundle args = new Bundle();
-    	Log.i("select item", "postition - select item: " + position);
     	args.putInt(PlaceholderFragment.MENU_NUMBER, position);
     	fragment.setArguments(args);
     	
@@ -173,6 +204,169 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
     
+    
+    
+  //---------- ASYNC TASK ------------------------------------
+    private class LoadFilmTask extends AsyncTask<String, Long, String>
+    {
+    	ProgressDialog dialog = new ProgressDialog(MainActivity.this);
+
+    	@Override
+    	protected void onPreExecute() 
+    	{
+    		super.onPreExecute();
+    		dialog.setMessage(getResources().getString(R.string.msg_consultando_informacion));
+    		dialog.show();
+    	}
+    	
+		@Override
+		protected String doInBackground(String... url) 
+		{
+			try
+			{
+				return HttpRequest.get(url[0]).accept("application/json").body();
+			}
+			catch(HttpRequestException e)
+			{
+				return null;
+			}
+		}
+    	
+		@Override
+		protected void onPostExecute(String result) 
+		{
+			Log.i("on post execute LoadFilm", "result: " + result);
+			getFoundedFilms(result);
+
+			if(dialog.isShowing())
+			{
+				dialog.dismiss();
+			}
+		}
+    }
+    
+
+    
+  //---------- METODOS Y FUNCIONES ------------------------------------
+    public void getFoundedFilms(String result)
+    {
+    	try 
+    	{	
+    		String apiPath = "http://image.tmdb.org/t/p/w500";
+    		
+			JSONObject receivedJson = new JSONObject(result);
+			numberFilms = receivedJson.getInt("total_results");
+			JSONArray jArrayResults = receivedJson.getJSONArray("results");
+
+			ArrayList<String> adultValues = getJsonElements(jArrayResults, "adult");
+			ArrayList<String> idValues = getJsonElements(jArrayResults, "id");
+			ArrayList<String> titleValues = getJsonElements(jArrayResults, "title");
+			ArrayList<String> originaltitleValues = getJsonElements(jArrayResults, "original_title");
+			ArrayList<String> dateValues = getJsonElements(jArrayResults, "release_date");
+			ArrayList<String> posterPathValues = getJsonElements(jArrayResults, "poster_path");
+			
+			beanFilmsFounded = new BeanFindFilms[adultValues.size()];
+			for(int i = 0; i < adultValues.size(); i++)
+			{
+				int id = Integer.parseInt(idValues.get(i));
+				String title = titleValues.get(i);
+				String subTitle = originaltitleValues.get(i);
+				String premiereDay = formatDate(dateValues.get(i));
+				String posterPath = apiPath + posterPathValues.get(i);
+				Log.i("get founded films", "idFiml on get founded: " + id);
+				beanFilmsFounded[i] = new BeanFindFilms(id, posterPath, title, subTitle, premiereDay);
+			}
+			
+			Log.i("on post execute", "elements: " + adultValues.size() + " " + idValues.size() + " " + titleValues.size() + " "
+					+ originaltitleValues.size()+ " " + dateValues.size() + " " + posterPathValues.size());
+			
+			
+			FilmListAdapter adapter = new FilmListAdapter(this);
+			lstFoundedFilms.setAdapter(adapter);
+		}
+    	catch (JSONException e) 
+    	{
+    		Toast.makeText(getApplicationContext(), getResources().getString(R.string.msg_no_pelicula), Toast.LENGTH_SHORT).show();
+			e.printStackTrace();
+		}
+    }
+    
+    public String formatDate(String dateUnformatted)
+    {
+    	String dateFormatted = "";
+    	
+    	if(dateUnformatted.length() > 0)
+    	{
+	    	String[] unformattedDateValues = dateUnformatted.split("-");
+	    	String day = unformattedDateValues[2];
+	    	String month = unformattedDateValues[1];
+	    	String year = unformattedDateValues[0];
+	    	
+	    	dateFormatted = day + "-"+ month+ "-" + year;
+    	}
+    	
+    	return dateFormatted;
+    }
+    
+        
+    public ArrayList<String> getJsonElements(JSONArray jsonArray, String objectName)
+    {
+    	ArrayList<String> foundedElements = new ArrayList<String>();
+    	
+    	for(int i = 0; i < jsonArray.length(); i++)
+    	{
+    		try 
+    		{
+				String element = jsonArray.getJSONObject(i).getString(objectName);
+				foundedElements.add(element);
+			}
+    		catch (JSONException e) 
+    		{
+				e.printStackTrace();
+			}
+    	}
+    	
+    	return foundedElements;
+    }
+    
+    class FilmListAdapter extends ArrayAdapter<Object>
+    {
+    	Activity context;
+    	
+		public FilmListAdapter(Activity context) 
+		{
+			super(context, R.layout.adapter_peliculas_encontradas, beanFilmsFounded);
+			this.context = context;
+		}
+		
+		public View getView(int position, View convertView, ViewGroup parent)
+		{
+			LayoutInflater inflater = context.getLayoutInflater();
+			View item = inflater.inflate(R.layout.adapter_peliculas_encontradas, null);
+			
+			ImageView imageView = (ImageView)item.findViewById(R.id.imageView1);
+			TextView txtTitle = (TextView)item.findViewById(R.id.textView1);
+			TextView txtOriginalTitle = (TextView)item.findViewById(R.id.textView2);
+			TextView txtPremiereDay = (TextView)item.findViewById(R.id.textView3);
+			
+			if(beanFilmsFounded[position].getImagePath().replace("http://image.tmdb.org/t/p/w500", "").contentEquals("null"))
+			{
+				imageView.setImageDrawable(getResources().getDrawable(R.drawable.no_disponible));
+			}
+			else
+			{
+				Picasso.with(getApplicationContext()).load(beanFilmsFounded[position].getImagePath()).into(imageView);
+			}
+			
+			txtTitle.setText(beanFilmsFounded[position].getTittle());
+			txtOriginalTitle.setText(lblOriginalTitle + ": " + beanFilmsFounded[position].getSubTittle());
+			txtPremiereDay.setText(lblPremiereDay + ": " + beanFilmsFounded[position].getPremiereDay());
+			
+			return item;
+		}
+    	
+    }
+    
 
     /**
      * A placeholder fragment containing a simple view.
@@ -180,11 +374,14 @@ public class MainActivity extends ActionBarActivity
     public static class PlaceholderFragment extends Fragment 
     {
     	public static final String MENU_NUMBER = "menu_number";
+    	int option = 0;
     	
-    	Button button;
-    	TextView txtTitle;
+    	//----- Elements declaration
     	View rootView;
-    	int numberTitle;
+    	//----- Main fragment
+    	EditText edtFilmSearch;
+    	ImageView imgButtonSearch;
+    	ListView lstFoundedFilms;
     	
         public PlaceholderFragment() {
         }
@@ -193,13 +390,16 @@ public class MainActivity extends ActionBarActivity
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) 
         {
             rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            txtTitle = (TextView) rootView.findViewById(R.id.textView1);
-            button = (Button) rootView.findViewById(R.id.button1);
-            numberTitle = getArguments().getInt(MENU_NUMBER);
-            Log.i("select item", "postition - fragment: " + numberTitle);
+            option = getArguments().getInt(MENU_NUMBER);
+
+            
+            
+            //----- Elements init
+            edtFilmSearch = (EditText) rootView.findViewById(R.id.editText1);
+            imgButtonSearch = (ImageView) rootView.findViewById(R.id.imageView1);
+            lstFoundedFilms = (ListView) rootView.findViewById(R.id.listView1);
+            
             return rootView;
-            
-            
         }
         
         @Override
@@ -207,13 +407,27 @@ public class MainActivity extends ActionBarActivity
         {
         	super.onActivityCreated(savedInstanceState);
         	
-        	txtTitle.setText("option " + numberTitle);
-        	button.setOnClickListener(new OnClickListener()
-        	{
+        	//----- Initializing API
+        	
+        	
+        	
+        	//----- Events for elements
+        	imgButtonSearch.setOnClickListener(new OnClickListener()
+        	{	
 				@Override
 				public void onClick(View v) 
 				{
-					Toast.makeText(getActivity().getApplicationContext(), "Hola ke ase", Toast.LENGTH_SHORT).show();
+					String receivedFilm = edtFilmSearch.getText().toString();
+					AnimationSet as = new AnimationSet(true);
+					AlphaAnimation aa = new AlphaAnimation(0,1);
+					aa.setDuration(1000);
+					as.addAnimation(aa);
+					imgButtonSearch.startAnimation(as);
+					
+					if(!receivedFilm.contentEquals(""))
+					{
+						
+					}
 				}
 			});
         }

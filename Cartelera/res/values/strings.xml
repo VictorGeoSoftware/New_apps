@@ -18,6 +18,7 @@
     <string name="no_disponible">No disponible</string>
     <string name="proximos_lanzamientos">Próximos lanzamientos</string>
     <string-array name="menu_array">
+        <item>Todos los géneros</item>
         <item>Acción</item>
         <item>Drama</item>
         <item>Comedia</item>
