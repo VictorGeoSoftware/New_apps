@@ -9,8 +9,8 @@
     <string name="msg_consultando_pelicula">Recuperando información de la película. Espere, por favor.</string>
     <string name="msg_no_pelicula">No se ha encontrado ninguna película con ese título.</string>
     <string name="buscar_pelicula">Buscar película</string>
-    <string name="introduce_nombre_pelicula">Introduce el nombre de la película</string>
-    <string name="lista_peliculas_encontradas">Lista de películas encontradas</string>
+    <string name="titulo_pelicula">Título de la película</string>
+    <string name="peliculas_encontradas">Películas encontradas</string>
     <string name="titulo">Título</string>
     <string name="titulo_original">Título original</string>
     <string name="fecha_estreno">Día de estreno</string>

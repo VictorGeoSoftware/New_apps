@@ -11,6 +11,7 @@ import com.victor.cartelera.HttpRequest.HttpRequestException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -43,21 +44,21 @@ import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity 
 {
-	//----- VIEW ELEMENTS
-	
+	static //----- VIEW ELEMENTS
+	TextView txtListTitle;
 		//----- Sidebar
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
-
+    
 
 	 //----- VARIABLES
     static String lblOriginalTitle = "";
 	static String lblPremiereDay = "";
-	String lblDescription = "";
-	String lblUnavaliable = "";
-	String lblNextFilms = "";
-	String lblFoundedFilms = "";
+	static String lblDescription = "";
+	static String lblUnavaliable = "";
+	static String lblNextFilms = "";
+	static String lblFoundedFilms = "";
 		//----- Sidebar
 	private CharSequence mTitle;
 	private CharSequence mDrawerTitle;
@@ -120,7 +121,7 @@ public class MainActivity extends ActionBarActivity
         lblPremiereDay = getResources().getString(R.string.fecha_estreno);
         lblDescription = getResources().getString(R.string.descripcion);
         lblUnavaliable = getResources().getString(R.string.no_disponible);
-        lblFoundedFilms = getResources().getString(R.string.lista_peliculas_encontradas);
+        lblFoundedFilms = getResources().getString(R.string.peliculas_encontradas);
         lblNextFilms = getResources().getString(R.string.proximos_lanzamientos);
         
     }
@@ -132,6 +133,7 @@ public class MainActivity extends ActionBarActivity
 		@Override
 		public void onItemClick(AdapterView parent, View view, int position, long id) 
 		{
+			txtListTitle.setText(lblNextFilms);
 			selectItem(position);
 		}
     	
@@ -207,15 +209,23 @@ public class MainActivity extends ActionBarActivity
      */
     public static class PlaceholderFragment extends Fragment 
     {
+    	//------ Variables declaration
     	public static final String MENU_NUMBER = "menu_number";
-    	private static final int SELECTED_FILM_DIALOG = 100;
     	
     	int option = 0;
     	int numberFilms = 0;
     	String apiWeb = "https://api.themoviedb.org/3";
     	String apiKey = "2ee24d57cde7770db40b27c27759bdfd";    	
     	BeanFindFilms[] beanFilmsFounded;
-		//----- GENRES ID
+    	
+    		//----- Dialogs variables
+    	String pathImageSelectedFilm = "";
+    	String titleSelectedFilm = "";
+    	String originalTitleSelectedFilm = "";
+    	String premiereSelectedFilm = "";
+    	String descriptionSelectedFilm = "";
+    	
+    		//----- GENRES ID
     	private static final int ACTION_ID = 28;
     	private static final int COMEDY_ID = 35;
     	private static final int DRAMA_ID = 18;
@@ -224,6 +234,7 @@ public class MainActivity extends ActionBarActivity
     	//----- Elements declaration
     	View rootView;
     		//----- Main fragment
+    	
     	EditText edtFilmSearch;
     	ImageView imgButtonSearch;
     	ListView lstFoundedFilms;
@@ -244,6 +255,7 @@ public class MainActivity extends ActionBarActivity
             
             
             //----- Elements init
+            txtListTitle = (TextView) rootView.findViewById(R.id.textView2);
             edtFilmSearch = (EditText) rootView.findViewById(R.id.editText1);
             imgButtonSearch = (ImageView) rootView.findViewById(R.id.imageView1);
             lstFoundedFilms = (ListView) rootView.findViewById(R.id.listView1);
@@ -294,14 +306,32 @@ public class MainActivity extends ActionBarActivity
 					String receivedFilm = edtFilmSearch.getText().toString();
 					AnimationSet as = new AnimationSet(true);
 					AlphaAnimation aa = new AlphaAnimation(0,1);
-					aa.setDuration(1000);
+					aa.setDuration(500);
 					as.addAnimation(aa);
 					imgButtonSearch.startAnimation(as);
 					
 					if(!receivedFilm.contentEquals(""))
 					{
-						
+						txtListTitle.setText(lblFoundedFilms);
+						String url = String.format(apiWeb + "/search/movie?&sort_by=release_date.desc&query="
+								+ receivedFilm + "&api_key=" +apiKey + "&language=es&include_image_language=es");
+						new LoadFilmTask().execute(url);
 					}
+				}
+			});
+        	
+        	lstFoundedFilms.setOnItemClickListener(new OnItemClickListener() 
+        	{
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
+				{
+					int idFilm = beanFilmsFounded[position].getIdFilm();
+					pathImageSelectedFilm = beanFilmsFounded[position].getImagePath();
+					titleSelectedFilm = beanFilmsFounded[position].getTittle();
+				    originalTitleSelectedFilm = beanFilmsFounded[position].getSubTittle();
+					premiereSelectedFilm = beanFilmsFounded[position].getPremiereDay();
+					String url = String.format(apiWeb + "/movie/"+ idFilm +	"?&api_key="+ apiKey +"&language=es");
+					new LoadDescriptionFilmTask().execute(url);
 				}
 			});
         }
@@ -342,6 +372,89 @@ public class MainActivity extends ActionBarActivity
     			if(dialog.isShowing())
     			{
     				dialog.dismiss();
+    			}
+    		}
+        }
+        
+        private class LoadDescriptionFilmTask extends AsyncTask<String, Long, String>
+        {
+        	ProgressDialog dialog = new ProgressDialog(getActivity());
+        	
+        	@Override
+        	protected void onPreExecute() 
+        	{
+        		// TODO Auto-generated method stub
+        		super.onPreExecute();
+        		dialog.setMessage(getResources().getString(R.string.msg_consultando_pelicula));
+        		dialog.show();
+        	}
+        	
+    		@Override
+    		protected String doInBackground(String... params) 
+    		{
+    			try
+    			{
+    				return HttpRequest.get(params[0]).accept("application/json").body();
+    			}
+    			catch(HttpRequestException e)
+    			{
+    				return null;
+    			}
+    		}
+    		
+    		@Override
+    		protected void onPostExecute(String result) 
+    		{
+    			Log.i("load description", "description result: " + result);
+    			try 
+    			{
+    				if(dialog.isShowing())
+    				{
+    					dialog.dismiss();
+    				}
+    				
+    				JSONObject receivedJson = new JSONObject(result);
+    				String descriptionReceived = receivedJson.getString("overview");
+    				
+    				Log.i("on post execute", "description received: " + descriptionReceived);
+    				if(descriptionReceived.contentEquals("null"))
+    				{
+    					descriptionReceived = lblUnavaliable;
+    				}
+   				
+    				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+    		    	LayoutInflater inflater = getActivity().getLayoutInflater();
+    		    	View layout = inflater.inflate(R.layout.dialog_selected_film, null);
+    		    	builder.setView(layout);
+	    				ImageView dialogImageView = (ImageView) layout.findViewById(R.id.imageView1);
+	    				TextView txtDialogTitle = (TextView) layout.findViewById(R.id.textView1);
+	    				TextView txtDialogOriginalTitle = (TextView) layout.findViewById(R.id.textView2);
+	    				TextView txtDialogPremiereDay = (TextView) layout.findViewById(R.id.textView3);
+	    				TextView txtDialogDescription = (TextView) layout.findViewById(R.id.textView4);
+	    				
+	    				String path = pathImageSelectedFilm.replace("http://image.tmdb.org/t/p/w500", "");
+	    				
+	    				txtDialogTitle.setText(titleSelectedFilm);
+	    				txtDialogOriginalTitle.setText(lblOriginalTitle + ": " + originalTitleSelectedFilm);
+	    				txtDialogPremiereDay.setText(lblPremiereDay + ": " + premiereSelectedFilm);
+	    				txtDialogDescription.setText(lblDescription + ": " + descriptionReceived);
+	    				
+	    				Log.i("on post execute", "path selected film: " + pathImageSelectedFilm + " " + path);
+	    				if(path.contentEquals("null"))
+	    				{
+	    					dialogImageView.setImageDrawable(getResources().getDrawable(R.drawable.no_disponible));
+	    				}
+	    				else
+	    				{
+	    					Picasso.with(getActivity()).load(pathImageSelectedFilm).into(dialogImageView);
+	    				}
+	    				
+    		    	builder.show();
+    			}
+    			catch (JSONException e) 
+    			{
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
     			}
     		}
         }
@@ -408,6 +521,8 @@ public class MainActivity extends ActionBarActivity
         	
         	return dateFormatted;
         }
+        
+        
         
             
         public ArrayList<String> getJsonElements(JSONArray jsonArray, String objectName)
