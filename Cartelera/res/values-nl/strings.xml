@@ -1,0 +1,36 @@
+<resources>
+
+    <string name="app_name">Aanvangstijden voor film</string>
+	<string name="hello_world">Hallo wereld!</string>
+	<string name="action_settings">Instellingen</string>
+	<string name="buscar">Zoeken</string>
+	<string name="msg_consultando_informacion">Consulting informatie. Wacht even, alstublieft.</string>
+	<string name="msg_consultando_pelicula">Ophalen van informatie uit de film. Wacht even, alstublieft.</string>
+	<string name="msg_no_pelicula">Uw zoekopdracht heeft geen film met die titel.</string>
+	<string name="buscar_pelicula">Zoeken naar film</string>
+	<string name="titulo_pelicula">Titel van de film</string>
+	<string name="pelicula">Film</string>
+	<string name="peliculas_encontradas">Films gevonden</string>
+	<string name="titulo">Titel</string>
+	<string name="titulo_original">Origineel</string>
+	<string name="fecha_estreno">Vrijlating Dag</string>
+	<string name="descripcion">Beschrijving</string>
+	<string name="no_disponible">Niet beschikbaar</string>
+	<string name="proximos_lanzamientos">Aankomende Releases</string>
+		<string-array name="menu_array">
+		<item>Alle genres</item>
+		<item>Actie</item>
+		<item>Drama</item>
+		<item>Komedie</item>
+		<item>Romance</item>
+	</string-array>
+	<string name="drawer_open">Open de browser kant</string>
+	<string name="drawer_close">Sluiten kant browser</string>
+	<string name="action_websearch">Zoeken op het web</string>
+	<string name="sobre_mi">over mij</string>
+	<string name="descripcion_yo">Android-ontwikkelaar gespecialiseerd in toepassingen voor het gebied van Engineering en geodetische landmeetkunde, en ook op het gebied van Civiele Techniek. Bovendien, het ontwikkelen van allerlei applicaties, het uitvoeren van verzoeken van dezelfde webservices.</string>
+	<string name="descripcion_yo2">Voor alle informatie kunt u contact met mij opnemen op het adres Ik laat hieronder.</string>
+	<string name="yo_correo">vpalmacarrasco@gmail.com</string>
+	<string name="referencia_api1">Deze toepassing maakt gebruik van de webservice die door</string>
+
+</resources>

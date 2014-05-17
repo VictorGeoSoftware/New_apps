@@ -1,0 +1,36 @@
+<resources>
+
+    <string name="app_name">Vorstellungs</string>
+	<string name="hello_world">Hallo Welt!</string>
+	<string name="action_settings">Einstellungen</string>
+	<string name="buscar">Suche</string>
+	<string name="msg_consultando_informacion">Beratung Informationen. Warten Sie einen Moment, bitte.</string>
+	<string name="msg_consultando_pelicula">Abrufen von Informationen aus dem Film. Warten Sie einen Moment, bitte.</string>
+	<string name="msg_no_pelicula">Nicht finden keinen Film mit diesem Titel.</string>
+	<string name="buscar_pelicula">Suche nach Film</string>
+	<string name="titulo_pelicula">Filmtitel</string>
+	<string name="pelicula">Film</string>
+	<string name="peliculas_encontradas">Filme gefunden</string>
+	<string name="titulo">Titel</string>
+	<string name="titulo_original">Original</string>
+	<string name="fecha_estreno">Release-Tag</string>
+	<string name="descripcion">Beschreibung</string>
+	<string name="no_disponible">Nicht verfügbar</string>
+	<string name="proximos_lanzamientos">Kommende Veröffentlichungen</string>
+	<string-array name="menu_array">
+		<item>Alle Genres</item>
+		<item>Aktion</item>
+		<item>Drama</item>
+		<item>Komödie</item>
+		<item>Romantik</item>
+	</string-array>
+	<string name="drawer_open">Öffnen Sie den Browser-Seite</string>
+	<string name="drawer_close">Schließen Seiten Browser</string>
+	<string name="action_websearch">Web durchsuchen</string>
+	<string name="sobre_mi">Über mich</string>
+	<string name="descripcion_yo">Android-Entwickler, spezialisiert auf Anwendungen für den Bereich der Vermessungswesen und Geodäsie, und auch im Bereich des Bauingenieurwesens. Darüber hinaus die Entwicklung aller Arten von Anwendungen, die Durchführung Anfragen von der gleichen Web-Services.</string>
+	<string name="descripcion_yo2">Für alle Informationen, können Sie mich unter der Adresse ich unten zeigen zu kontaktieren.</string>
+	<string name="yo_correo">vpalmacarrasco@gmail.com</string>
+	<string name="referencia_api1">Diese Anwendung nutzt die Web-Service von</string>
+
+</resources>

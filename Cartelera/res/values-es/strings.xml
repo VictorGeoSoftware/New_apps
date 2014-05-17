@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">Cartelera</string>
@@ -34,6 +33,5 @@
     <string name="descripcion_yo2">Para cualquier información, puedes contactar conmigo en la dirección que muestro abajo.</string>
     <string name="yo_correo">vpalmacarrasco@gmail.com</string>
     <string name="referencia_api1">Esta aplicación consume el servicio web facilitado por</string>
-    
 
 </resources>

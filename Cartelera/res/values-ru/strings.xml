@@ -1,0 +1,37 @@
+<resources>
+
+    <string name="app_name">Сеансы фильма</string>
+	<string name="hello_world">Привет мир!</string>
+	<string name="action_settings">настройки</string>
+	<string name="buscar">поиск</string>
+	<string name="msg_consultando_informacion">Консалтинг информацию. Подождите, пожалуйста.</string>
+	<string name="msg_consultando_pelicula">Получение информации из фильма. Подождите, пожалуйста.</string>
+	<string name="msg_no_pelicula">Не найти любой фильм с таким названием.</string>
+	<string name="buscar_pelicula">Поиск фильма</string>
+	<string name="titulo_pelicula">Название фильма</string>
+	<string name="pelicula">кино</string>
+	<string name="peliculas_encontradas">Фильмы найдено</string>
+	<string name="titulo">название</string>
+	<string name="titulo_original">оригинальный</string>
+	<string name="fecha_estreno">День выпуска</string>
+	<string name="descripcion">описание</string>
+	<string name="no_disponible">Нет в наличии</string>
+	<string name="proximos_lanzamientos">Предстоящие релизы</string>
+	<string-array name="menu_array">
+		<item>Все жанры</item>
+		<item>действие</item>
+		<item>драма</item>
+		<item>комедия</item>
+		<item>романтика</item>
+	</string-array>
+	<string name="drawer_open">Откройте стороне браузера</string>
+	<string name="drawer_close">Закрыть сторона браузера</string>
+	<string name="action_websearch">Поиск в Интернете</string>
+	<string name="sobre_mi">Обо мне</string>
+	
+	<string name="descripcion_yo">Android-разработчик, специализирующаяся на приложениях для области машиностроения и геодезии, а также в области гражданского строительства. Кроме того, развитие всех видов приложений, выполняя запросы от тех же веб-сервисов.</string>
+	<string name="descripcion_yo2">За любую информацию, вы можете связаться со мной по адресу я показываю ниже.</string>
+	<string name="yo_correo">vpalmacarrasco@gmail.com</string>
+	<string name="referencia_api1">Это приложение использует веб-сервис, предоставляемый</string>
+
+</resources>

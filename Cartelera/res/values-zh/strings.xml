@@ -1,0 +1,39 @@
+<resources>
+
+    <string name="app_name">电影放映时间</string>
+	<string name="hello_world">世界，你好！</string>
+	<string name="action_settings">设置</string>
+	<string name="buscar">搜索</string>
+	<string name="msg_consultando_informacion">咨询信息。稍等片刻，请。</string>
+	<string name="msg_consultando_pelicula">从影片中检索信息。稍等片刻，请。</string>
+	<string name="msg_no_pelicula">没有找到任何与电影的标题。</string>
+	<string name="buscar_pelicula">搜索电影</string>
+	<string name="titulo_pelicula">电影片名</string>
+	<string name="pelicula">电影</string>
+	<string name="peliculas_encontradas">发现膜</string>
+	<string name="titulo">标题</string>
+	<string name="titulo_original">原</string>
+	<string name="fecha_estreno">发布日</string>
+	<string name="descripcion">描述</string>
+	<string name="no_disponible">不可用</string>
+	<string name="proximos_lanzamientos">即将发布</string>
+	<string-array name="menu_array">
+		<item>所有类型</item>
+		<item>行动</item>
+		<item>戏剧</item>
+		<item>喜剧</item>
+		<item>浪漫</item>
+	</string-array>
+	<string name="drawer_open">打开浏览器端</string>
+	<string name="drawer_close">关闭端浏览器</string>
+	<string name="action_websearch">搜索网页</string>
+	<string name="sobre_mi">关于我</string>
+	<string name="descripcion_yo">Android开发专业工程及大地测量领域的应用，同时也土木工程领域内。此外，开发各种应用中，从相同的web服务进行请求。</string>
+	<string name="descripcion_yo2">对于任何信息，你可以在我下面显示的地址与我联系。</string>
+	<string name="yo_correo">vpalmacarrasco@gmail.com</string>
+	<string name="referencia_api1">此应用程序使用提供的Web服务</string>
+
+
+
+
+</resources>

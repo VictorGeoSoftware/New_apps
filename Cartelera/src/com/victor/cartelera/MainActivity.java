@@ -15,6 +15,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ import android.view.animation.AnimationSet;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -231,7 +233,7 @@ public class MainActivity extends ActionBarActivity
     	View rootView;
     		//----- Main fragment
     	EditText edtFilmSearch;
-    	ImageView imgButtonSearch;
+    	Button btnSearch;
     	ListView lstFoundedFilms;
     		//----- Adapter
     	Activity adapterContextActiviy;  //--> Necessary for instantiate activity in custom arrayAdapter
@@ -250,7 +252,7 @@ public class MainActivity extends ActionBarActivity
             //----- Elements init
             txtListTitle = (TextView) rootView.findViewById(R.id.textView2);
             edtFilmSearch = (EditText) rootView.findViewById(R.id.editText1);
-            imgButtonSearch = (ImageView) rootView.findViewById(R.id.imageView1);
+            btnSearch= (Button) rootView.findViewById(R.id.button1);
             lstFoundedFilms = (ListView) rootView.findViewById(R.id.listView1);
             
             return rootView;
@@ -298,18 +300,13 @@ public class MainActivity extends ActionBarActivity
         	
         	
         	//----- Events for elements
-        	imgButtonSearch.setOnClickListener(new OnClickListener()
+        	btnSearch.setOnClickListener(new OnClickListener()
         	{	
 				@Override
 				public void onClick(View v) 
 				{
 					String receivedFilm = edtFilmSearch.getText().toString();
-					AnimationSet as = new AnimationSet(true);
-					AlphaAnimation aa = new AlphaAnimation(0,1);
-					aa.setDuration(500);
-					as.addAnimation(aa);
-					imgButtonSearch.startAnimation(as);
-					
+
 					if(!receivedFilm.contentEquals(""))
 					{
 						txtListTitle.setText(lblFoundedFilms);
@@ -428,6 +425,7 @@ public class MainActivity extends ActionBarActivity
     		    	View layout = inflater.inflate(R.layout.dialog_selected_film, null);
     		    	builder.setView(layout);
 	    				ImageView dialogImageView = (ImageView) layout.findViewById(R.id.imageView1);
+	    				final ImageView searchImageView = (ImageView) layout.findViewById(R.id.imageView2);
 	    				TextView txtDialogTitle = (TextView) layout.findViewById(R.id.textView1);
 	    				TextView txtDialogOriginalTitle = (TextView) layout.findViewById(R.id.textView2);
 	    				TextView txtDialogPremiereDay = (TextView) layout.findViewById(R.id.textView3);
@@ -440,7 +438,6 @@ public class MainActivity extends ActionBarActivity
 	    				txtDialogPremiereDay.setText(lblPremiereDay + ": " + premiereSelectedFilm);
 	    				txtDialogDescription.setText(lblDescription + ": " + descriptionReceived);
 	    				
-	    				Log.i("on post execute", "path selected film: " + pathImageSelectedFilm + " " + path);
 	    				if(path.contentEquals("null"))
 	    				{
 	    					dialogImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_vacio));
@@ -449,6 +446,18 @@ public class MainActivity extends ActionBarActivity
 	    				{
 	    					Picasso.with(getActivity()).load(pathImageSelectedFilm).into(dialogImageView);
 	    				}
+
+	    				searchImageView.setOnClickListener(new View.OnClickListener()
+	    				{
+							@Override
+							public void onClick(View v) 
+							{
+								String film = getResources().getString(R.string.pelicula);
+					            Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+					            intent.putExtra(SearchManager.QUERY, film + " " + titleSelectedFilm);
+					            startActivity(intent);
+							}
+						});
 	    				
     		    	builder.show();
     			}

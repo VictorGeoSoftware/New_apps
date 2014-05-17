@@ -1,0 +1,39 @@
+<resources>
+
+    <string name="app_name">Estreias de filmes</string>
+	<string name="hello_world">Olá, mundo!</string>
+	<string name="action_settings">Configurações</string>
+	<string name="buscar">pesquisa</string>
+	<string name="msg_consultando_informacion">Consultoria informações. Espere um momento, por favor.</string>
+	<string name="msg_consultando_pelicula">Recuperando informações do filme. Espere um momento, por favor.</string>
+	<string name="msg_no_pelicula">Não encontrar qualquer filme com esse título.</string>
+	<string name="buscar_pelicula">Pesquisar por filme</string>
+	<string name="titulo_pelicula">Título Filme</string>
+	<string name="pelicula">filme</string>
+	<string name="peliculas_encontradas">Filmes encontrados</string>
+	<string name="titulo">título</string>
+	<string name="titulo_original">original</string>
+	<string name="fecha_estreno">Dia de Lançamento</string>
+	<string name="descripcion">descrição</string>
+	<string name="no_disponible">não disponível</string>
+	<string name="proximos_lanzamientos">Próximos Lançamentos</string>
+	<string-array name="menu_array">
+		<item>Todos os Gêneros</item>
+		<item>ação</item>
+		<item>drama</item>
+		<item>comédia</item>
+		<item>romance</item>
+	</string-array>
+	<string name="drawer_open">Abra lado do navegador</string>
+	<string name="drawer_close">Fechar navegador lado</string>
+	<string name="action_websearch">Pesquisar na Web</string>
+	<string name="sobre_mi">sobre mim</string>
+	<string name="descripcion_yo">Desenvolvedor Android especializada em aplicativos para a área de Engenharia e Topografia Geodetic, e também no campo da Engenharia Civil. Além disso, o desenvolvimento de todos os tipos de aplicações, realizando solicitações dos mesmos serviços da web.</string>
+	<string name="descripcion_yo2">Para qualquer informação, você pode entrar em contato comigo no endereço mostro abaixo.</string>
+	<string name="yo_correo">vpalmacarrasco@gmail.com</string>
+	<string name="referencia_api1">Esta aplicação utiliza o serviço Web fornecido pela</string>
+
+
+
+
+</resources>

@@ -1,0 +1,36 @@
+<resources>
+
+    <string name="app_name">Horaire du film</string>
+	<string name="hello_world">Bonjour tout le monde!</string>
+	<string name="action_settings">Paramètres</string>
+	<string name="buscar">Recherche</string>
+	<string name="msg_consultando_informacion">La consultation d`informations. Attendez un instant, s`il vous plaît.</string>
+	<string name="msg_consultando_pelicula">Récupération d`informations du film. Attendez un instant, s`il vous plaît.</string>
+	<string name="msg_no_pelicula">Pas trouver n`importe quel film avec ce titre.</string>
+	<string name="buscar_pelicula">Recherche pour le cinéma</string>
+	<string name="titulo_pelicula">Titre du film</string>
+	<string name="pelicula">Film</string>
+	<string name="peliculas_encontradas">Films trouvés</string>
+	<string name="titulo">Titre</string>
+	<string name="titulo_original">Original</string>
+	<string name="fecha_estreno">Jour de sortie</string>
+	<string name="descripcion">Description</string>
+	<string name="no_disponible">Non disponible</string>
+	<string name="proximos_lanzamientos">Communiqués à venir</string>
+	<string-array name="menu_array">
+		<item>Tous les genres</item>
+		<item>Action</item>
+		<item>Drame</item>
+		<item>Comédie</item>
+		<item>Romance</item>
+	</string-array>
+	<string name="drawer_open">Ouvrez le côté du navigateur</string>
+	<string name="drawer_close">Fermer navigateur côté</string>
+	<string name="action_websearch">Rechercher sur le Web</string>
+	<string name="sobre_mi">À propos de moi</string>
+	<string name="descripcion_yo">Développeur Android spécialisée dans les applications pour le domaine de l`ingénierie et d`arpentage géodésique, et également dans le domaine du génie civil. En outre, le développement de toutes sortes d`applications, l`exécution des demandes des mêmes services web.</string>
+	<string name="descripcion_yo2">Pour toute information, vous pouvez me contacter à l`adresse que je montre ci-dessous.</string>
+	<string name="yo_correo">vpalmacarrasco@gmail.com</string>
+	<string name="referencia_api1">Cette application utilise le service Web fourni par</string>
+
+</resources>
