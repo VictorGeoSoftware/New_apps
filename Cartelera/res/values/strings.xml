@@ -27,5 +27,12 @@
 	<string name="drawer_open">Abrir el navegador lateral</string>
     <string name="drawer_close">Cerrar el navegador lateral</string>
     <string name="action_websearch">Buscar en la web</string>
+    <string name="sobre_mi">Sobre mi</string>
+    <string name="yo">Víctor Palma Carrasco</string>
+    <string name="descripcion_yo">Desarrollador Android especializado en aplicaciones para el ámbito de la Ingeniería Topográfica y Geodésica, y también dentro del ámbito de la Ingeniería Civil. Además, desarrollo todo tipo de aplicaciones, realizando peticiones desde las mismas a servicios web.</string>
+    <string name="descripcion_yo2">Para cualquier información, puedes contactar conmigo en la dirección que muestro abajo.</string>
+    <string name="yo_correo">vpalmacarrasco@gmail.com</string>
+    <string name="referencia_api1">Esta aplicación consume el servicio web facilitado por</string>
+    
 
 </resources>

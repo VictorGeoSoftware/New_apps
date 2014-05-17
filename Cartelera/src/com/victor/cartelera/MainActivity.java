@@ -1,22 +1,21 @@
 package com.victor.cartelera;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.squareup.picasso.Picasso;
-import com.victor.cartelera.HttpRequest.HttpRequestException;
-
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
-import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -31,16 +30,17 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
-import android.webkit.WebChromeClient.CustomViewCallback;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
+import com.victor.cartelera.HttpRequest.HttpRequestException;
 
 public class MainActivity extends ActionBarActivity 
 {
@@ -59,6 +59,7 @@ public class MainActivity extends ActionBarActivity
 	static String lblUnavaliable = "";
 	static String lblNextFilms = "";
 	static String lblFoundedFilms = "";
+	static String language = "en";
 		//----- Sidebar
 	private CharSequence mTitle;
 	private CharSequence mDrawerTitle;
@@ -164,9 +165,6 @@ public class MainActivity extends ActionBarActivity
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) 
     {
-    	boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-    	menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
-    	
     	return super.onPrepareOptionsMenu(menu);
     }
     
@@ -188,13 +186,10 @@ public class MainActivity extends ActionBarActivity
     	switch (item.getItemId())
     	{
     		case R.id.action_settings:
-    			Toast.makeText(getApplicationContext(), getResources().getString(R.string.action_settings), Toast.LENGTH_SHORT).show();
+    			Intent i = new Intent(MainActivity.this, About.class);
+    			startActivity(i);
     		break;
-    		
-			case R.id.action_websearch:
-				Toast.makeText(getApplicationContext(), getResources().getString(R.string.action_websearch), Toast.LENGTH_SHORT).show();
-			break;
-	
+
 			default:
 			break;
 		}
@@ -213,7 +208,7 @@ public class MainActivity extends ActionBarActivity
     	public static final String MENU_NUMBER = "menu_number";
     	
     	int option = 0;
-    	int numberFilms = 0;
+    	boolean queryByFilm = false;
     	String apiWeb = "https://api.themoviedb.org/3";
     	String apiKey = "2ee24d57cde7770db40b27c27759bdfd";    	
     	BeanFindFilms[] beanFilmsFounded;
@@ -231,10 +226,10 @@ public class MainActivity extends ActionBarActivity
     	private static final int DRAMA_ID = 18;
     	private static final int ROMANCE_ID = 10749;
     	
+    	
     	//----- Elements declaration
     	View rootView;
     		//----- Main fragment
-    	
     	EditText edtFilmSearch;
     	ImageView imgButtonSearch;
     	ListView lstFoundedFilms;
@@ -242,9 +237,7 @@ public class MainActivity extends ActionBarActivity
     	Activity adapterContextActiviy;  //--> Necessary for instantiate activity in custom arrayAdapter
 
     	
-    	
-        public PlaceholderFragment() {
-        }
+        public PlaceholderFragment() {}
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) 
@@ -268,31 +261,38 @@ public class MainActivity extends ActionBarActivity
         {
         	super.onActivityCreated(savedInstanceState);
         	
+        	String[] dates = getTodayDate().split(" ");
+
         	//----- Initializing API
         	String url = "";
+        	language = Locale.getDefault().getLanguage();
+        	queryByFilm = false;
+        	Log.i("on activity created", "language: " + language);
         	switch (option)
         	{
 	        	case 0:
-	        		url = String.format(apiWeb + "/discover/movie?&api_key=" + apiKey);
+	        		url = String.format(apiWeb + "/discover/movie?&api_key=" + apiKey) + "&release_date.lte=" + dates[0];
 	        	break;
 	        	case 1:
 	        		url = String.format(apiWeb + "/discover/movie?&api_key=" + apiKey + 
-	        				"&with_genres=" + ACTION_ID);
+	        				"&with_genres=" + ACTION_ID + "&release_date.lte=" + dates[1]);
 	        	break;
 	        	case 2:
 	        		url = String.format(apiWeb + "/discover/movie?&api_key=" + apiKey + 
-	        				"&with_genres="  + DRAMA_ID);	        		
+	        				"&with_genres="  + DRAMA_ID + "&release_date.lte=" + dates[1]);	        		
 	        	break;
 	        	case 3:
 	        		url = String.format(apiWeb + "/discover/movie?&api_key=" + apiKey + 
-	        				"&with_genres="  + COMEDY_ID);
+	        				"&with_genres="  + COMEDY_ID + "&release_date.lte=" + dates[1]);
 	        	break;
 	        	case 4:
 	        		url = String.format(apiWeb + "/discover/movie?&api_key=" + apiKey + 
-	        				"&with_genres="  + ROMANCE_ID);
+	        				"&with_genres="  + ROMANCE_ID + "&release_date.lte=" + dates[1]);
 	        	break;
         	}
-        	url = url + "&language=es&release_date.gte=2014-01-01&release_date.lte=2015-01-01&sort_by=release_date.desc";
+
+        	url = url + "&language=" + language + "&sort_by=release_date.desc";
+        	Log.i("on activity created", "url: " + url);
 			
 			new LoadFilmTask().execute(url);
         	
@@ -314,7 +314,9 @@ public class MainActivity extends ActionBarActivity
 					{
 						txtListTitle.setText(lblFoundedFilms);
 						String url = String.format(apiWeb + "/search/movie?&sort_by=release_date.desc&query="
-								+ receivedFilm + "&api_key=" +apiKey + "&language=es&include_image_language=es");
+								+ receivedFilm + "&api_key=" +apiKey + "&language="+language+"&include_image_language="+language);
+						queryByFilm = true;
+						
 						new LoadFilmTask().execute(url);
 					}
 				}
@@ -330,7 +332,7 @@ public class MainActivity extends ActionBarActivity
 					titleSelectedFilm = beanFilmsFounded[position].getTittle();
 				    originalTitleSelectedFilm = beanFilmsFounded[position].getSubTittle();
 					premiereSelectedFilm = beanFilmsFounded[position].getPremiereDay();
-					String url = String.format(apiWeb + "/movie/"+ idFilm +	"?&api_key="+ apiKey +"&language=es");
+					String url = String.format(apiWeb + "/movie/"+ idFilm +	"?&api_key="+ apiKey +"&language="+language);
 					new LoadDescriptionFilmTask().execute(url);
 				}
 			});
@@ -405,7 +407,6 @@ public class MainActivity extends ActionBarActivity
     		@Override
     		protected void onPostExecute(String result) 
     		{
-    			Log.i("load description", "description result: " + result);
     			try 
     			{
     				if(dialog.isShowing())
@@ -442,7 +443,7 @@ public class MainActivity extends ActionBarActivity
 	    				Log.i("on post execute", "path selected film: " + pathImageSelectedFilm + " " + path);
 	    				if(path.contentEquals("null"))
 	    				{
-	    					dialogImageView.setImageDrawable(getResources().getDrawable(R.drawable.no_disponible));
+	    					dialogImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_vacio));
 	    				}
 	    				else
 	    				{
@@ -469,7 +470,6 @@ public class MainActivity extends ActionBarActivity
         		String apiPath = "http://image.tmdb.org/t/p/w500";
         		
     			JSONObject receivedJson = new JSONObject(result);
-    			numberFilms = receivedJson.getInt("total_results");
     			JSONArray jArrayResults = receivedJson.getJSONArray("results");
 
     			ArrayList<String> adultValues = getJsonElements(jArrayResults, "adult");
@@ -479,7 +479,19 @@ public class MainActivity extends ActionBarActivity
     			ArrayList<String> dateValues = getJsonElements(jArrayResults, "release_date");
     			ArrayList<String> posterPathValues = getJsonElements(jArrayResults, "poster_path");
     			
+    			//ArrayList order inverted when is showing a film genre list
+    			if(!queryByFilm)
+    			{
+	    			Collections.reverse(adultValues);
+	    			Collections.reverse(idValues);
+	    			Collections.reverse(titleValues);
+	    			Collections.reverse(originaltitleValues);
+	    			Collections.reverse(dateValues);
+	    			Collections.reverse(posterPathValues);
+    			}
+
     			beanFilmsFounded = new BeanFindFilms[adultValues.size()];
+    			
     			for(int i = 0; i < adultValues.size(); i++)
     			{
     				int id = Integer.parseInt(idValues.get(i));
@@ -487,14 +499,12 @@ public class MainActivity extends ActionBarActivity
     				String subTitle = originaltitleValues.get(i);
     				String premiereDay = formatDate(dateValues.get(i));
     				String posterPath = apiPath + posterPathValues.get(i);
-    				Log.i("get founded films", "idFiml on get founded: " + id);
+
     				beanFilmsFounded[i] = new BeanFindFilms(id, posterPath, title, subTitle, premiereDay);
     			}
     			
-    			
-    			Log.i("on post execute", "elements: " + adultValues.size() + " " + idValues.size() + " " + titleValues.size() + " "
-    					+ originaltitleValues.size()+ " " + dateValues.size() + " " + posterPathValues.size());
-    			
+    			Log.i("GetFilms", "elementos: " + adultValues.size() + " / " + beanFilmsFounded.length);
+
     			FilmListAdapter adapter = new FilmListAdapter(adapterContextActiviy);
     			lstFoundedFilms.setAdapter(adapter);
     		}
@@ -522,7 +532,19 @@ public class MainActivity extends ActionBarActivity
         	return dateFormatted;
         }
         
-        
+        public String getTodayDate()
+        {
+        	Calendar c = Calendar.getInstance();
+        	SimpleDateFormat todayFormat = new SimpleDateFormat("yyyy-MM-dd");
+        	String todayDate = todayFormat.format(c.getTime());
+        	
+        	c.add(Calendar.MONTH, +3);
+        	
+        	String nextDate = todayFormat.format(c.getTime());
+        	todayDate = todayDate + " " + nextDate;
+        	
+        	return todayDate;
+        }
         
             
         public ArrayList<String> getJsonElements(JSONArray jsonArray, String objectName)
@@ -567,7 +589,7 @@ public class MainActivity extends ActionBarActivity
     			
     			if(beanFilmsFounded[position].getImagePath().replace("http://image.tmdb.org/t/p/w500", "").contentEquals("null"))
     			{
-    				imageView.setImageDrawable(getResources().getDrawable(R.drawable.no_disponible));
+    				Picasso.with(getActivity()).load(R.drawable.ic_vacio).into(imageView);
     			}
     			else
     			{
