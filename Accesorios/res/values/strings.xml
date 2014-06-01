@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Accesorios</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="action_settings">Settings</string>
+    <string name="catalog">Catálogo</string>
+    <string name="compass">Brújula</string>
+    <string name="burble_level">Nivel de burbuja</string>
+    <string name="title">Título</string>
+    <string name="description">Description</string>
+    
+    <string name="base_datos">Base de Datos</string>
+	<string name="base_datos_des">Potente base de datos para almacenar puntos topográficos, y usarlos en todas mis aplicaciones topográficas. En un solo lugar, podrás almacenar toda la información que necesites, y tenerla siempre a mano.</string>
+	<string name="asistente">Asistente de Replanteo</string>
+	<string name="asistente_des">Completo gestor de trabajos topográficos, que incluye todas las herramientas necesarias para replanteo y toma de datos en campo.</string>
+	<string name="geodesia">Geodesia</string>
+	<string name="geodesia_des">Aplicación para todo tipo de cálculos geodésicos. Genera un detallado informe en formato txt, con toda la secuencia de cálculos realizados.</string>
+	<string name="informes">Informes</string>
+	<string name="informes_des">Aplicación para generar informes y artículos, en cualquier situación, allí donde estés con tu smartphone. Incluso puedes añadir una imagen al mismo.</string>
+	<string name="nivelaciones">Topografía - Nivelaciones</string>
+	<string name="nivelaciones_des">Trabajos topográficos de nivelación. Herramientas especiales para carreteras y vías férreas. Los datos recogidos en campo puedes grabarlos en un fichero de texto.</string>
+	<string name="resenas">Reseñas topográficas</string>
+	<string name="resenas_des">Completa herramienta para generar reseñas de bases topográficas, y generar un documento pdf con toda la información de la base.</string>
+	<string name="datum">Datum</string>
+	<string name="datum_des">Aplicación diseñada para migrar coordenadas entre diferentes DATUM, a través de una transformación de semejanza. Ideal para zonas en las que se esten implantando nuevos sistemas de referencia.</string>
+	<string name="levantamientos">Levantamientos</string>
+	<string name="levantamientos_des">Registra todas tus observaciones, sin importar qué tipo de estación tengas! Tendrás todas las observaciones de tus trabajos siempre disponibles, para volcarla en un fichero de texto, e incluso poder calcular la poligonal, y las coordenadas de los puntos observados.</string>
+    
+	<string name="copmrar_app">Comprar aplicación</string>
+	<string name="msg_comprar_app">Selecciona desde página web deseas comprar la aplicación. Desde GeoSoftware podrás pagar a través de PayPal.</string>
+	<string name="google_play">Google Play</string>
+	<string name="geosoftware">Geosoftware</string>
+	
+	<string name="azimut">Azimut</string>
+	<string name="angulo_vertical">Angulo vertical</string>
+	<string name="inclinacion">Inclinación</string>
+	<string name="cero_m">0.000</string>
+	
+	<string name="grados_cente">Grados centesimales</string>
+	<string name="grados_sexa">Grados sexagesimales</string>
+	
+</resources>
