@@ -42,7 +42,8 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 
-public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
+public class MainActivity extends ActionBarActivity implements ActionBar.TabListener
+{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -58,7 +59,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
-
+    
+	SensorManager sensorManager;
+	Sensor accelerometer;
+	Sensor magnetometer;
 
 
     @Override
@@ -66,6 +70,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+		
+		sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+		accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        
+        
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -100,7 +110,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                             .setTabListener(this));
         }
     }
-
+    
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -151,7 +161,22 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+//            return PlaceholderFragment.newInstance(position + 1);
+
+        	switch (position) 
+        	{
+				case 0:
+					return PlaceholderFragment.newInstance();
+					
+				case 1:
+					return CompassFragment.newInstance();
+					
+				case 2:
+					return BurbleFragment.newInstance();
+					
+				default:
+					return null;
+			}
         }
 
         @Override
@@ -174,12 +199,311 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             return null;
         }
     }
+    
+    
+    
 
     
     /**
-     * A placeholder fragment containing a simple view.
+     * FRAGMENTS
      */
-    public static class PlaceholderFragment extends Fragment implements SensorEventListener 
+    
+    public static class BurbleFragment extends Fragment implements SensorEventListener
+    {
+    	//----- Elements
+    	ImageView imgBurble;
+    	
+    		//----- Device issues
+    	SensorManager sensorManager;
+    	Sensor accelerometer;
+    	Sensor magnetometer;
+    	
+    	
+    	//----- Variables
+		float[] matrizGravity;
+		float[] matrizGeomagnetic;
+		
+		
+		public BurbleFragment(){}
+		
+		public static BurbleFragment newInstance()
+		{
+			BurbleFragment burbleFragment = new BurbleFragment();
+			return burbleFragment;
+		}
+		
+		
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) 
+		{
+			// TODO Auto-generated method stub
+			View rootView = inflater.inflate(R.layout.fragment_burble_level, container, false);
+			rootView.setBackgroundResource(R.drawable.burble_background);
+			
+    		sensorManager = (SensorManager) this.getActivity().getSystemService(Context.SENSOR_SERVICE);
+    		accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+    		magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+    		
+    		sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
+    		sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
+			
+			imgBurble = (ImageView) rootView.findViewById(R.id.imageView1);
+			
+			
+			return rootView;
+		}
+		
+		@Override
+		public void onSensorChanged(SensorEvent event) 
+		{
+//			// TODO Auto-generated method stub
+			if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
+			{
+				matrizGravity = event.values;
+			}
+			
+			if(event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
+			{
+				matrizGeomagnetic = event.values;
+			}
+			
+			if(matrizGravity != null && matrizGeomagnetic != null)
+			{
+				float[] R = new float[9];
+				float[] I = new float[9];
+				boolean recojeDatos = SensorManager.getRotationMatrix(R, I, matrizGravity, matrizGeomagnetic);
+				
+				if(recojeDatos)
+				{
+					float angles[] = new float[3];
+					SensorManager.getOrientation(R, angles);
+					float acimut = angles[0]*180/3.14159f;
+					float verticalAngle = angles[1]*180/3.14159f;
+					float rollAngle = angles[2]*200/3.14159f;
+					Log.i("onSensorChanged", "fragment nivel: " + acimut);
+
+				}
+			}
+			
+		}
+
+		@Override
+		public void onAccuracyChanged(Sensor sensor, int accuracy) {
+			// TODO Auto-generated method stub
+			
+		}
+    	
+    }
+    
+    
+    public static class CompassFragment extends Fragment implements SensorEventListener
+    {
+    	//----- Elements
+        ImageView imgCompass;
+        TextView lblAzimuth;
+        TextView lblVerticalAngle;
+        TextView lblInclination;
+        RadioGroup radioGroup;
+        
+        	//----- Device issues
+    	SensorManager sensorManager;
+    	Sensor accelerometer;
+    	Sensor magnetometer;
+    	
+    	
+    	//----- Variables
+		float[] matrizGravity;
+		float[] matrizGeomagnetic;
+		boolean cente = true;
+		float angleFactor = 200;
+		
+		
+		public CompassFragment(){}
+		
+		public static CompassFragment newInstance()
+		{
+			CompassFragment compassFragment = new CompassFragment();
+			return compassFragment;
+		}
+		
+		
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) 
+		{
+			// TODO Auto-generated method stub
+			View rootView = inflater.inflate(R.layout.fragment_compass, container, false);
+			
+    		sensorManager = (SensorManager) this.getActivity().getSystemService(Context.SENSOR_SERVICE);
+    		accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+    		magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+    		
+    		sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
+    		sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
+    		
+			imgCompass = (ImageView) rootView.findViewById(R.id.imageView1);
+			radioGroup = (RadioGroup) rootView.findViewById(R.id.radioGroup1);
+			lblAzimuth = (TextView) rootView.findViewById(R.id.textView4);
+			lblVerticalAngle = (TextView) rootView.findViewById(R.id.textView5);
+			lblInclination = (TextView) rootView.findViewById(R.id.textView6);
+			
+			return rootView;
+		}
+		
+		@Override
+		public void onActivityCreated(Bundle savedInstanceState) 
+		{
+			// TODO Auto-generated method stub
+			super.onActivityCreated(savedInstanceState);
+			
+    		radioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
+    		{	
+				@Override
+				public void onCheckedChanged(RadioGroup group, int checkedId) 
+				{
+					switch(checkedId)
+					{
+						case R.id.radio0:
+							// cente
+							cente = true;
+							angleFactor = 200;
+						break;
+						
+						case R.id.radio1:
+							// sexa
+							cente = false;
+							angleFactor = 180;
+						break;
+					}
+				}
+			});
+			
+		}
+    	
+		@Override
+		public void onPause() 
+		{
+			// TODO Auto-generated method stub
+			super.onPause();
+			sensorManager.unregisterListener(this);
+		}
+
+
+		@Override
+		public void onSensorChanged(SensorEvent event) 
+		{
+//			// TODO Auto-generated method stub
+			DecimalFormat gradesFormat = new DecimalFormat("0.0000");
+			DecimalFormat climbFormat = new DecimalFormat("0.00");
+			
+			if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
+			{
+				matrizGravity = event.values;
+			}
+			
+			if(event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
+			{
+				matrizGeomagnetic = event.values;
+			}
+			
+			if(matrizGravity != null && matrizGeomagnetic != null)
+			{
+				float[] R = new float[9];
+				float[] I = new float[9];
+				boolean recojeDatos = SensorManager.getRotationMatrix(R, I, matrizGravity, matrizGeomagnetic);
+				
+				if(recojeDatos)
+				{
+					float angles[] = new float[3];
+					SensorManager.getOrientation(R, angles);
+					float imageAcimut = angles[0]*180/3.14159f;
+					float acimut = angles[0]*angleFactor/3.14159f;
+					float verticalAngle = angles[1]*angleFactor/3.14159f;
+//					float rollAngle = angles[2]*200/3.14159f;
+					Log.i("onSensorChanged", "fragment brujula: " + acimut);
+					imgCompass.setRotation(-imageAcimut);
+
+					lblInclination.setText(climbFormat.format(-verticalAngle*100/45) + "%");
+					
+					if(acimut < 0)
+					{
+						acimut = 2*angleFactor + acimut;
+					}
+					
+					verticalAngle = verticalAngle + angleFactor/2;
+					
+					if(cente)
+					{
+						lblAzimuth.setText(gradesFormat.format(acimut)+"g");
+						lblVerticalAngle.setText(gradesFormat.format(verticalAngle)+"g");
+					}
+					else
+					{
+						lblAzimuth.setText(pasar_a_sexa(acimut));
+						lblVerticalAngle.setText(pasar_a_sexa(verticalAngle));
+					}
+					
+//					lblInclination.setText(gradesFormat.format(rollAngle)+"g");
+				}
+			}
+		}
+
+		@Override
+		public void onAccuracyChanged(Sensor sensor, int accuracy) {
+			// TODO Auto-generated method stub
+			
+		}
+    	
+		public String pasar_a_sexa (double angulo) //angulo -> angulo sexa con decimales
+		{	
+			DecimalFormat Decimal = new DecimalFormat("0.00");
+			DecimalFormat NoDecimal = new DecimalFormat("00");
+			
+			String angulo_str = Double.toString(angulo);
+			String grados= quita_puntos(angulo_str);
+			double angulo_entero = Double.parseDouble(grados);
+			
+			//Decimales
+			double parte_decimal = angulo - angulo_entero;
+			double minutos = 0;
+			minutos = parte_decimal * 60; //Minutos
+			
+			String minutos_str = Double.toString(minutos);
+			String minutos_enteros = quita_puntos(minutos_str);
+			double minutos_ent = Double.parseDouble(minutos_enteros);
+			
+			double parte_decimal_segundos = minutos - minutos_ent;
+			double segundos = 0;
+			segundos = parte_decimal_segundos * 60;
+			
+			String resultado = grados + "º " + NoDecimal.format(Math.abs(minutos_ent))+ "' " + Decimal.format(Math.abs(segundos))+"''";
+			return resultado;
+		}
+		
+		public String quita_puntos(String numero)
+		{
+			String angulo_str = numero;
+			String lector = "";
+			String entero = "";
+			int caracteres = angulo_str.length();
+			
+			for (int i = 0; i < caracteres; i++)
+			{
+				lector = angulo_str.substring(i, i+1);
+				if (lector.contentEquals(".") || lector.contentEquals(","))
+				{
+					i = caracteres;
+				}
+				else
+				{
+					entero = entero + lector;
+				}
+			}
+			
+			return entero;
+		}
+    }
+    
+    public static class PlaceholderFragment extends Fragment 
     {
         /**
          * The fragment argument representing the section number for this
@@ -188,120 +512,60 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     	//----- Variables
         private static final String ARG_SECTION_NUMBER = "section_number";
         BeanCatalog[] datos;
-        Activity arrayAdapterActivity;
-    		//----- Magnetometer and accelerometer
-		float[] matrizGravity;
-		float[] matrizGeomagnetic;
-		
-		boolean cente = true;
-		float angleFactor = 200;
-        
         
         //----- Elements
-    	SensorManager sensorManager;
-    	Sensor accelerometer;
-    	Sensor magnetometer;
-    	
-    	View rootView;
-    		//----- Catalog
+        Activity arrayAdapterActivity;
         ListView lstCatalog;
-        	//----- Compass
-        ImageView imgCompass;
-        TextView lblAzimuth;
-        TextView lblVerticalAngle;
-        TextView lblInclination;
-        RadioGroup radioGroup;
 
 
-        
-        
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
+        public static PlaceholderFragment newInstance() {
             PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
             return fragment;
         }
 
-        public PlaceholderFragment() {
-        }
+        public PlaceholderFragment() {}
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-    		sensorManager = (SensorManager) this.getActivity().getSystemService(Context.SENSOR_SERVICE);
-    		accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-    		magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-    		
-        	int section = getArguments().getInt(ARG_SECTION_NUMBER);
+        	View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         	arrayAdapterActivity = getActivity();
+            lstCatalog = (ListView) rootView.findViewById(R.id.listView1);
+		            
+		            
+            //----- Cargamos listado de aplicaciones
+            String baseDatos = getResources().getString(R.string.base_datos);
+            String baseDatos_des = getResources().getString(R.string.base_datos_des);
+            String geodesia = getResources().getString(R.string.geodesia);
+            String geodesia_des = getResources().getString(R.string.geodesia_des);
+            String asistente = getResources().getString(R.string.asistente);
+            String asistente_des = getResources().getString(R.string.asistente_des);
+            String nivelaciones = getResources().getString(R.string.nivelaciones);
+            String nivelaciones_des = getResources().getString(R.string.nivelaciones_des);
+            String informes = getResources().getString(R.string.informes);
+            String informes_des = getResources().getString(R.string.informes_des);
+            String resenas = getResources().getString(R.string.resenas);
+            String resenas_des = getResources().getString(R.string.resenas_des);
+            String levantamientos = getResources().getString(R.string.levantamientos);
+            String levantamientos_des = getResources().getString(R.string.levantamientos_des);
+            String datum = getResources().getString(R.string.datum);
+            String datum_des = getResources().getString(R.string.datum_des);
             
+            datos = new BeanCatalog[]
+            		{
+            			new BeanCatalog(levantamientos, levantamientos_des, R.drawable.ic_levantamientos),
+            			new BeanCatalog(datum, datum_des, R.drawable.ic_datum),
+            			new BeanCatalog(baseDatos, baseDatos_des, R.drawable.icono),
+            			new BeanCatalog(geodesia, geodesia_des, R.drawable.geodesia),
+            			new BeanCatalog(asistente, asistente_des, R.drawable.asistente),
+            			new BeanCatalog(nivelaciones, nivelaciones_des, R.drawable.nivelaciones),
+            			new BeanCatalog(informes, informes_des, R.drawable.informes),
+            			new BeanCatalog(resenas, resenas_des, R.drawable.resenas)
+            		};
             
-        	switch (section)
-        	{
-				case 1:
-					Log.i("onCreateView", "actividad 1 creada");
-					rootView = inflater.inflate(R.layout.fragment_main, container, false);
-		            lstCatalog = (ListView) rootView.findViewById(R.id.listView1);
-		            
-		            
-		            //----- Cargamos listado de aplicaciones
-		            String baseDatos = getResources().getString(R.string.base_datos);
-		            String baseDatos_des = getResources().getString(R.string.base_datos_des);
-		            String geodesia = getResources().getString(R.string.geodesia);
-		            String geodesia_des = getResources().getString(R.string.geodesia_des);
-		            String asistente = getResources().getString(R.string.asistente);
-		            String asistente_des = getResources().getString(R.string.asistente_des);
-		            String nivelaciones = getResources().getString(R.string.nivelaciones);
-		            String nivelaciones_des = getResources().getString(R.string.nivelaciones_des);
-		            String informes = getResources().getString(R.string.informes);
-		            String informes_des = getResources().getString(R.string.informes_des);
-		            String resenas = getResources().getString(R.string.resenas);
-		            String resenas_des = getResources().getString(R.string.resenas_des);
-		            String levantamientos = getResources().getString(R.string.levantamientos);
-		            String levantamientos_des = getResources().getString(R.string.levantamientos_des);
-		            String datum = getResources().getString(R.string.datum);
-		            String datum_des = getResources().getString(R.string.datum_des);
-		            
-		            datos = new BeanCatalog[]
-		            		{
-		            			new BeanCatalog(levantamientos, levantamientos_des, R.drawable.ic_levantamientos),
-		            			new BeanCatalog(datum, datum_des, R.drawable.ic_datum),
-		            			new BeanCatalog(baseDatos, baseDatos_des, R.drawable.icono),
-		            			new BeanCatalog(geodesia, geodesia_des, R.drawable.geodesia),
-		            			new BeanCatalog(asistente, asistente_des, R.drawable.asistente),
-		            			new BeanCatalog(nivelaciones, nivelaciones_des, R.drawable.nivelaciones),
-		            			new BeanCatalog(informes, informes_des, R.drawable.informes),
-		            			new BeanCatalog(resenas, resenas_des, R.drawable.resenas)
-		            		};
-		            
-		            CustomArrayAdapter adapter = new CustomArrayAdapter(arrayAdapterActivity);
-		            lstCatalog.setAdapter(adapter);
-				break;
-				
-				case 2:
-					rootView = inflater.inflate(R.layout.fragment_compass, container, false);
-					imgCompass = (ImageView) rootView.findViewById(R.id.imageView1);
-					radioGroup = (RadioGroup) rootView.findViewById(R.id.radioGroup1);
-					lblAzimuth = (TextView) rootView.findViewById(R.id.textView4);
-					lblVerticalAngle = (TextView) rootView.findViewById(R.id.textView5);
-					lblInclination = (TextView) rootView.findViewById(R.id.textView6);
+            CustomArrayAdapter adapter = new CustomArrayAdapter(arrayAdapterActivity);
+            lstCatalog.setAdapter(adapter);
 
-				break;
-				
-				case 3:
-					rootView = inflater.inflate(R.layout.fragment_burble_level, container, false);
-					
-				break;
-
-				default:
-					rootView = inflater.inflate(R.layout.fragment_main, container, false);
-				break;
-			}
 
             return rootView;
         }
@@ -311,7 +575,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         {
         	// TODO Auto-generated method stub
         	super.onActivityCreated(savedInstanceState);
-        	
 
         	
         	//----- Variables initializing
@@ -320,80 +583,38 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         	final String googlePlay = getResources().getString(R.string.google_play);
         	final String geosoftware = getResources().getString(R.string.geosoftware);
 
-        	int section = getArguments().getInt(ARG_SECTION_NUMBER);
-        	
-        	switch(section)
+        	lstCatalog.setOnItemClickListener(new OnItemClickListener() 
         	{
-	        	case 1:
-	            	//----- Catalog fragment elements
-	            	lstCatalog.setOnItemClickListener(new OnItemClickListener() 
-	            	{
-	    				@Override
-	    				public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
-	    				{
-	    					final int pos = position;
-	    					AlertDialog.Builder builder = new AlertDialog.Builder(arrayAdapterActivity);
-	    					builder.setTitle(buy);
-	    					builder.setMessage(msgBuy);
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
+				{
+					final int pos = position;
+					AlertDialog.Builder builder = new AlertDialog.Builder(arrayAdapterActivity);
+					builder.setTitle(buy);
+					builder.setMessage(msgBuy);
 
-	    					builder.setPositiveButton(googlePlay, new OnClickListener()
-	    					{
-	    						@Override
-	    						public void onClick(DialogInterface dialog, int which) 
-	    						{
-	    							abrirPaginaGoogle(pos);
-	    						}
-	    					});
-	    					
-	    					builder.setNegativeButton(geosoftware, new OnClickListener()
-	    					{
-	    						@Override
-	    						public void onClick(DialogInterface dialog, int which) 
-	    						{
-	    							abrirPaginaPayPal(pos);
-	    						}
-	    					});
-	    					
-	    					builder.show();
-	    				}
-	    			});
-	        	break;
-	        	
-	        	case 2:
-	        		sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
-	        		sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
-	        		
-	        		radioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
-	        		{	
+					builder.setPositiveButton(googlePlay, new OnClickListener()
+					{
 						@Override
-						public void onCheckedChanged(RadioGroup group, int checkedId) 
+						public void onClick(DialogInterface dialog, int which) 
 						{
-							switch(checkedId)
-							{
-								case R.id.radio0:
-									// cente
-									cente = true;
-									angleFactor = 200;
-								break;
-								
-								case R.id.radio1:
-									// sexa
-									cente = false;
-									angleFactor = 180;
-								break;
-							}
+							abrirPaginaGoogle(pos);
 						}
 					});
-	        	break;
-	        	
-	        	case 3:
-	        		
-	        	break;
-	        	
-	        	default:
-	        		
-	        	break;
-        	}
+					
+					builder.setNegativeButton(geosoftware, new OnClickListener()
+					{
+						@Override
+						public void onClick(DialogInterface dialog, int which) 
+						{
+							abrirPaginaPayPal(pos);
+						}
+					});
+					
+					builder.show();
+				}
+			});
+
         }
         
         
@@ -535,120 +756,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         	TextView description;
         	ImageView imageView;
         }
-
-
-		@Override
-		public void onSensorChanged(SensorEvent event) {
-			// TODO Auto-generated method stub
-			DecimalFormat gradesFormat = new DecimalFormat("0.0000");
-			DecimalFormat climbFormat = new DecimalFormat("0.00");
-			
-			if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
-			{
-				matrizGravity = event.values;
-			}
-			
-			if(event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
-			{
-				matrizGeomagnetic = event.values;
-			}
-			
-			if(matrizGravity != null && matrizGeomagnetic != null)
-			{
-				float[] R = new float[9];
-				float[] I = new float[9];
-				boolean recojeDatos = SensorManager.getRotationMatrix(R, I, matrizGravity, matrizGeomagnetic);
-				
-				if(recojeDatos)
-				{
-					float angles[] = new float[3];
-					SensorManager.getOrientation(R, angles);
-					float imageAcimut = angles[0]*180/3.14159f;
-					float acimut = angles[0]*angleFactor/3.14159f;
-					float verticalAngle = angles[1]*angleFactor/3.14159f;
-//					float rollAngle = angles[2]*200/3.14159f;
-					
-					imgCompass.setRotation(-imageAcimut);
-
-					lblInclination.setText(climbFormat.format(-verticalAngle*100/45) + "%");
-					
-					if(acimut < 0)
-					{
-						acimut = 2*angleFactor + acimut;
-					}
-					
-					verticalAngle = verticalAngle + angleFactor/2;
-					
-					if(cente)
-					{
-						lblAzimuth.setText(gradesFormat.format(acimut)+"g");
-						lblVerticalAngle.setText(gradesFormat.format(verticalAngle)+"g");
-					}
-					else
-					{
-						lblAzimuth.setText(pasar_a_sexa(acimut));
-						lblVerticalAngle.setText(pasar_a_sexa(verticalAngle));
-					}
-					
-//					lblInclination.setText(gradesFormat.format(rollAngle)+"g");
-				}
-			}
-		}
-
-		@Override
-		public void onAccuracyChanged(Sensor sensor, int accuracy) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		public String pasar_a_sexa (double angulo) //angulo -> angulo sexa con decimales
-		{	
-			DecimalFormat Decimal = new DecimalFormat("0.00");
-			DecimalFormat NoDecimal = new DecimalFormat("00");
-			
-			String angulo_str = Double.toString(angulo);
-			String grados= quita_puntos(angulo_str);
-			double angulo_entero = Double.parseDouble(grados);
-			
-			//Decimales
-			double parte_decimal = angulo - angulo_entero;
-			double minutos = 0;
-			minutos = parte_decimal * 60; //Minutos
-			
-			String minutos_str = Double.toString(minutos);
-			String minutos_enteros = quita_puntos(minutos_str);
-			double minutos_ent = Double.parseDouble(minutos_enteros);
-			
-			double parte_decimal_segundos = minutos - minutos_ent;
-			double segundos = 0;
-			segundos = parte_decimal_segundos * 60;
-			
-			String resultado = grados + "º " + NoDecimal.format(Math.abs(minutos_ent))+ "' " + Decimal.format(Math.abs(segundos))+"''";
-			return resultado;
-		}
-		
-		public String quita_puntos(String numero)
-		{
-			String angulo_str = numero;
-			String lector = "";
-			String entero = "";
-			int caracteres = angulo_str.length();
-			
-			for (int i = 0; i < caracteres; i++)
-			{
-				lector = angulo_str.substring(i, i+1);
-				if (lector.contentEquals(".") || lector.contentEquals(","))
-				{
-					i = caracteres;
-				}
-				else
-				{
-					entero = entero + lector;
-				}
-			}
-			
-			return entero;
-		}
     }
 
 }
