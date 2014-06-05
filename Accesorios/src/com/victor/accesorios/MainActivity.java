@@ -223,6 +223,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     	//----- Variables
 		float[] matrizGravity;
 		float[] matrizGeomagnetic;
+		float verticaGlobal = 0;
+		float rollGlobal = 0;
 		
 		
 		public BurbleFragment(){}
@@ -247,10 +249,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     		
     		sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     		sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_NORMAL);
-			
+	
 			imgBurble = (ImageView) rootView.findViewById(R.id.imageView1);
-			
-			
+
 			return rootView;
 		}
 		
@@ -258,7 +259,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		public void onSensorChanged(SensorEvent event) 
 		{
 //			// TODO Auto-generated method stub
-			float dpiFactor = 640;
+			float dpiFactor = 500;
 			float xCentreView = rootView.getWidth()/2;
 			float yCentreView = rootView.getHeight()/2;
 			float xCentreImage = imgBurble.getWidth()/2;
@@ -287,10 +288,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 					
 					float verticalAngle = angles[1]*180/3.14159f;
 					float rollAngle = angles[2]*180/3.14159f;
+					
+					verticaGlobal = 0.9f*verticaGlobal + 0.1f*verticalAngle;
+					rollGlobal = 0.9f*rollGlobal + 0.1f*rollAngle;
 
-					double xImage = xCentreView - xCentreImage + dpiFactor*Math.cos(rollAngle);
-					double yImage = yCentreView - yCentreImage + dpiFactor*Math.cos(verticalAngle);
-					Log.i("burbleTab", "cos en x - y:" + Math.cos(rollAngle) + " - " + Math.cos(verticalAngle));
+					double xImage = xCentreView - xCentreImage + dpiFactor*Math.cos(rollGlobal);
+					double yImage = yCentreView - yCentreImage + dpiFactor*Math.cos(verticaGlobal);
+					
 					imgBurble.setTranslationX(doubleToFloat(xImage));
 					imgBurble.setTranslationY(doubleToFloat(yImage));
 				}
