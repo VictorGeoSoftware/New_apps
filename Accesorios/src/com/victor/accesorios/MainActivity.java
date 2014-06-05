@@ -211,6 +211,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     public static class BurbleFragment extends Fragment implements SensorEventListener
     {
     	//----- Elements
+    	View rootView;
     	ImageView imgBurble;
     	
     		//----- Device issues
@@ -237,15 +238,15 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) 
 		{
 			// TODO Auto-generated method stub
-			View rootView = inflater.inflate(R.layout.fragment_burble_level, container, false);
+			rootView = inflater.inflate(R.layout.fragment_burble_level, container, false);
 			rootView.setBackgroundResource(R.drawable.burble_background);
 			
     		sensorManager = (SensorManager) this.getActivity().getSystemService(Context.SENSOR_SERVICE);
     		accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     		magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
     		
-    		sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
-    		sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
+    		sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+    		sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_NORMAL);
 			
 			imgBurble = (ImageView) rootView.findViewById(R.id.imageView1);
 			
@@ -257,6 +258,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		public void onSensorChanged(SensorEvent event) 
 		{
 //			// TODO Auto-generated method stub
+			float dpiFactor = 640;
+			float xCentreView = rootView.getWidth()/2;
+			float yCentreView = rootView.getHeight()/2;
+			float xCentreImage = imgBurble.getWidth()/2;
+			float yCentreImage = imgBurble.getHeight()/2;
+			
 			if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
 			{
 				matrizGravity = event.values;
@@ -277,14 +284,24 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 				{
 					float angles[] = new float[3];
 					SensorManager.getOrientation(R, angles);
-					float acimut = angles[0]*180/3.14159f;
+					
 					float verticalAngle = angles[1]*180/3.14159f;
-					float rollAngle = angles[2]*200/3.14159f;
-					Log.i("onSensorChanged", "fragment nivel: " + acimut);
+					float rollAngle = angles[2]*180/3.14159f;
 
+					double xImage = xCentreView - xCentreImage + dpiFactor*Math.cos(rollAngle);
+					double yImage = yCentreView - yCentreImage + dpiFactor*Math.cos(verticalAngle);
+					Log.i("burbleTab", "cos en x - y:" + Math.cos(rollAngle) + " - " + Math.cos(verticalAngle));
+					imgBurble.setTranslationX(doubleToFloat(xImage));
+					imgBurble.setTranslationY(doubleToFloat(yImage));
 				}
 			}
 			
+		}
+		
+		public float doubleToFloat(double value)
+		{
+			String valueString = Double.toString(value);
+			return Float.parseFloat(valueString);
 		}
 
 		@Override
@@ -293,6 +310,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 			
 		}
     	
+		@Override
+		public void onPause() 
+		{
+			// TODO Auto-generated method stub
+			super.onPause();
+			sensorManager.unregisterListener(this);
+		}
     }
     
     
@@ -418,8 +442,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 					float imageAcimut = angles[0]*180/3.14159f;
 					float acimut = angles[0]*angleFactor/3.14159f;
 					float verticalAngle = angles[1]*angleFactor/3.14159f;
-//					float rollAngle = angles[2]*200/3.14159f;
-					Log.i("onSensorChanged", "fragment brujula: " + acimut);
+					
 					imgCompass.setRotation(-imageAcimut);
 
 					lblInclination.setText(climbFormat.format(-verticalAngle*100/45) + "%");
@@ -441,8 +464,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 						lblAzimuth.setText(pasar_a_sexa(acimut));
 						lblVerticalAngle.setText(pasar_a_sexa(verticalAngle));
 					}
-					
-//					lblInclination.setText(gradesFormat.format(rollAngle)+"g");
 				}
 			}
 		}
