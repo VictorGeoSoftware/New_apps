@@ -60,22 +60,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
      */
     ViewPager mViewPager;
     
-	SensorManager sensorManager;
-	Sensor accelerometer;
-	Sensor magnetometer;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-		
-		sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-		accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        
-        
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -225,6 +215,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		float[] matrizGeomagnetic;
 		float verticaGlobal = 0;
 		float rollGlobal = 0;
+		static final float ALPHA = 0.25f;
 		
 		
 		public BurbleFragment(){}
@@ -241,18 +232,37 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		{
 			// TODO Auto-generated method stub
 			rootView = inflater.inflate(R.layout.fragment_burble_level, container, false);
-			rootView.setBackgroundResource(R.drawable.burble_background);
 			
     		sensorManager = (SensorManager) this.getActivity().getSystemService(Context.SENSOR_SERVICE);
     		accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     		magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
     		
-    		sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-    		sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_NORMAL);
+    		sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
+    		sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
 	
 			imgBurble = (ImageView) rootView.findViewById(R.id.imageView1);
 
 			return rootView;
+		}
+		
+		@Override
+		public void setMenuVisibility(boolean menuVisible) 
+		{
+			// TODO Auto-generated method stub
+			super.setMenuVisibility(menuVisible);
+			
+			if(rootView != null)
+			{
+				if(menuVisible)
+				{
+					sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
+		    		sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
+				}
+				else
+				{
+					sensorManager.unregisterListener(this);
+				}
+			}
 		}
 		
 		@Override
@@ -267,12 +277,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 			
 			if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
 			{
-				matrizGravity = event.values;
+				matrizGravity = lowPass(event.values.clone(), matrizGravity);
 			}
-			
+
 			if(event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
 			{
-				matrizGeomagnetic = event.values;
+				matrizGeomagnetic = lowPass(event.values.clone(), matrizGeomagnetic);
 			}
 			
 			if(matrizGravity != null && matrizGeomagnetic != null)
@@ -294,7 +304,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
 					double xImage = xCentreView - xCentreImage + dpiFactor*Math.cos(rollGlobal);
 					double yImage = yCentreView - yCentreImage + dpiFactor*Math.cos(verticaGlobal);
-					
+
 					imgBurble.setTranslationX(doubleToFloat(xImage));
 					imgBurble.setTranslationY(doubleToFloat(yImage));
 				}
@@ -307,6 +317,21 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 			String valueString = Double.toString(value);
 			return Float.parseFloat(valueString);
 		}
+		
+	    protected float[] lowPass(float[] input, float[] output)
+	    {
+	    	if(output == null)
+	    	{
+	    		return input;
+	    	}
+	    	
+	    	for(int i = 0; i < input.length; i++)
+	    	{
+	    		output[i] = output[i] + ALPHA * (input[i] - output[i]);
+	    	}
+	    	
+	    	return output;
+	    }
 
 		@Override
 		public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -314,6 +339,15 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 			
 		}
     	
+		@Override
+		public void onResume() 
+		{
+			// TODO Auto-generated method stub
+			super.onResume();
+			sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
+    		sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
+		}
+		
 		@Override
 		public void onPause() 
 		{
@@ -327,6 +361,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     public static class CompassFragment extends Fragment implements SensorEventListener
     {
     	//----- Elements
+    	View rootView;
         ImageView imgCompass;
         TextView lblAzimuth;
         TextView lblVerticalAngle;
@@ -355,11 +390,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		}
 		
 		
+		
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) 
 		{
 			// TODO Auto-generated method stub
-			View rootView = inflater.inflate(R.layout.fragment_compass, container, false);
+			rootView = inflater.inflate(R.layout.fragment_compass, container, false);
 			
     		sensorManager = (SensorManager) this.getActivity().getSystemService(Context.SENSOR_SERVICE);
     		accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -405,6 +441,35 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 				}
 			});
 			
+		}
+		
+		@Override
+		public void setMenuVisibility(boolean menuVisible) 
+		{
+			// TODO Auto-generated method stub
+			super.setMenuVisibility(menuVisible);
+			
+			if(rootView != null)
+			{
+				if(menuVisible)
+				{
+					sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
+		    		sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
+				}
+				else
+				{
+					sensorManager.unregisterListener(this);
+				}
+			}
+		}
+		
+		@Override
+		public void onResume() 
+		{
+			// TODO Auto-generated method stub
+			super.onResume();
+			sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
+    		sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
 		}
     	
 		@Override
@@ -453,9 +518,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 					
 					if(acimut < 0)
 					{
-						acimut = 2*angleFactor + acimut;
+						acimut = 2 * angleFactor + acimut;
 					}
-					
+
 					verticalAngle = verticalAngle + angleFactor/2;
 					
 					if(cente)
