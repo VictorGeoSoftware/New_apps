@@ -42,4 +42,16 @@
 	<string name="grados_cente">Grados centesimales</string>
 	<string name="grados_sexa">Grados sexagesimales</string>
 	
+	<string name="meteorologia">Meteorología</string>
+	<string name="msg_no_internet">Se necesita conexión a internet para poder obtener información.</string>
+	<string name="msg_consultando_informacion">Consultando información. Espere por favor.</string>
+	<string name="msg_no_informacion">No se ha podido obtener ninguna información.</string>
+	<string name="nombre_ciudad">Nombre de la ciudad</string>
+	
+	<string name="temperatura">Temperatura</string>
+	<string name="cielo">Cielo</string>
+	<string name="presion">Presión</string>
+	<string name="humedad">Humedad</string>
+	<string name="leyendo_datos">Leyendo datos</string>
+	
 </resources>

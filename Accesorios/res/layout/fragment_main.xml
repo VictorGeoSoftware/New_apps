@@ -13,6 +13,7 @@
         android:id="@+id/listView1"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
+        android:background="#33533b19"
         android:layout_weight="1" >
     </ListView>
 

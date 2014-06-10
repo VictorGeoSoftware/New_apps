@@ -1,11 +1,47 @@
 package com.victor.accesorios;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TooManyListenersException;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.google.gson.JsonElement;
+import com.squareup.picasso.Picasso;
+import com.victor.accesorios.HttpRequest.HttpRequestException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -16,9 +52,15 @@ import android.graphics.Matrix;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.hardware.SensorListener;
 import android.hardware.SensorManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -36,6 +78,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.ImageView.ScaleType;
 import android.widget.ListView;
 import android.widget.RadioGroup;
@@ -59,6 +102,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
+    
+    private static String jsonResult = "";
     
 
     @Override
@@ -137,7 +182,17 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
 
-    /**
+
+	public String getJsonResult() {
+		return jsonResult;
+	}
+
+
+	public void setJsonResult(String jsonResult) {
+		MainActivity.jsonResult = jsonResult;
+	}
+
+	/**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
@@ -164,6 +219,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 				case 2:
 					return BurbleFragment.newInstance();
 					
+				case 3:
+					return WeatherFragment.newInstance();
+					
 				default:
 					return null;
 			}
@@ -172,7 +230,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 4;
         }
 
         @Override
@@ -185,6 +243,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                     return getString(R.string.compass).toUpperCase(l);
                 case 2:
                     return getString(R.string.burble_level).toUpperCase(l);
+                case 3:
+                	return getString(R.string.meteorologia).toUpperCase(l);
             }
             return null;
         }
@@ -197,6 +257,294 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     /**
      * FRAGMENTS
      */
+    public static class WeatherFragment extends Fragment
+    {
+    	//----- Elements
+    	View rootView;
+    	ListView lstWeather;
+    	TextView txtCityName;
+    	Activity adapterActivity;
+    	
+    	
+    	//----- Variables
+    	boolean requestMade = false;
+    	private static String API = "http://api.openweathermap.org/data/2.5/forecast?";
+    	private static String API_KEY = "2d05913cf6eebef49b01b4894090f3c8";
+    	
+    	double latitude = 0;
+    	double longitude = 0;
+    	
+    	String temperature;
+    	String sky;
+    	String pressure;
+    	String humidity;
+    	
+    	BeanWeatherList[] weatherList;
+    	
+    	LocationManager locationManager;
+    	LocationListener locListenerNetwork;
+    	
+		
+    	public WeatherFragment(){}
+    	
+    	public static WeatherFragment newInstance()
+    	{
+    		WeatherFragment weatherFragment = new WeatherFragment();
+    		return weatherFragment;
+    	}
+    	
+    	
+    	@Override
+    	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) 
+    	{
+    		// TODO Auto-generated method stub
+    		rootView = inflater.inflate(R.layout.fragment_weather, container, false);
+    		lstWeather = (ListView) rootView.findViewById(R.id.listView1);
+    		txtCityName = (TextView) rootView.findViewById(R.id.textView1);
+    		adapterActivity = this.getActivity();
+    		
+    		//----- Strings resources
+    		temperature = getResources().getString(R.string.temperatura) + ": ";
+    		sky = getResources().getString(R.string.cielo) + ": ";
+    		pressure = getResources().getString(R.string.presion) + ": ";
+    		humidity = getResources().getString(R.string.humedad) + ": ";
+    		
+    		
+    		return rootView;
+    	}
+    	
+    	@Override
+    	public void onActivityCreated(Bundle savedInstanceState) 
+    	{
+    		// TODO Auto-generated method stub
+    		super.onActivityCreated(savedInstanceState);
+    		
+    			//----- Getting position
+    		locListenerNetwork = new MyLocationListener();
+    		
+    		locationManager = (LocationManager) this.getActivity().getSystemService(Context.LOCATION_SERVICE);
+    		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locListenerNetwork);
+    		
+    			//----- Refresh listView (if needed)
+    		MainActivity jObject = new MainActivity();
+    		String result = "";
+    		
+    		if(requestMade)
+    		{
+    			result = jObject.getJsonResult();
+    		}
+    		
+    		if(lstWeather.getCount() < 1 && !result.contentEquals(""))
+    		{
+    			getDataFromJson(result);
+    		}
+    	}
+    	
+    	
+    	
+    	//----- Methods and Subroutines
+    	private class MyLocationListener implements LocationListener
+    	{
+			@Override
+			public void onLocationChanged(Location location) {
+				// TODO Auto-generated method stub
+				latitude = location.getLatitude();
+				longitude = location.getLongitude();
+				
+				if(latitude != 0 && longitude != 0 && requestMade == false && rootView != null)
+				{
+					//----- JSON request
+					String language = Locale.getDefault().getLanguage();
+					if(language.contentEquals("es")) language = "sp";
+					
+					String url = API + "lat="+ latitude + "&lon="+ longitude + "&lang="+ language + "&units=metric&APPID"+API_KEY;
+					
+					new WeatherTask().execute(url);
+					requestMade = true;
+				}
+			}
+
+			@Override
+			public void onStatusChanged(String provider, int status, Bundle extras) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onProviderEnabled(String provider) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onProviderDisabled(String provider) {
+				// TODO Auto-generated method stub
+				Toast.makeText(getActivity(), getResources().getString(R.string.msg_no_internet), Toast.LENGTH_SHORT).show();
+			}
+    	}
+    	
+    	
+    	private class WeatherTask extends AsyncTask<String, Long, String>
+    	{
+    		
+    		@Override
+    		protected void onPreExecute() 
+    		{
+    			// TODO Auto-generated method stub
+    			super.onPreExecute();
+    		}
+    		
+			@Override
+			protected String doInBackground(String... params) 
+			{
+				// TODO Auto-generated method stub
+				try
+				{
+					return HttpRequest.get(params[0]).accept("application/json").body();
+				}
+				catch(HttpRequestException e)
+				{
+					return null;
+				}
+			}
+    		
+			@Override
+			protected void onPostExecute(String result) 
+			{
+				// TODO Auto-generated method stub
+				getDataFromJson(result);
+				
+				MainActivity jObject = new MainActivity();
+				jObject.setJsonResult(result);
+			}
+    	}
+    	
+    	public void getDataFromJson(String result)
+    	{
+			try
+			{
+				JSONObject receivedJson = new JSONObject(result);
+				Log.i("onPostExecute", "result:: " + result);
+				JSONObject citiyData = receivedJson.getJSONObject("city");
+				String cityName = citiyData.getString("name").replace("-", " ");
+				txtCityName.setText(cityName);
+				
+				
+				JSONArray jArrayList = receivedJson.getJSONArray("list");					
+				weatherList = new BeanWeatherList[jArrayList.length()];
+				
+				String oldData = ""; // I only take the first data of one day
+				for(int i = 0; i < jArrayList.length(); i++)
+				{
+					String[] dataHour = jArrayList.getJSONObject(i).getString("dt_txt").split(" ");
+					String data = dataHour[0];
+					String hour = dataHour[1];
+					
+					Log.i("getDataFromJson", "data / oldData: " + data + " / " + oldData);	
+						JSONObject mainObject = jArrayList.getJSONObject(i).getJSONObject("main");
+					String temperatures = mainObject.getString("temp_min") + "ºC / " + mainObject.get("temp_max") + "ºC";
+					String pressure = mainObject.getString("pressure");
+					String humidity = mainObject.getString("humidity");
+					
+						JSONArray weatherArray = jArrayList.getJSONObject(i).getJSONArray("weather");
+					String description = weatherArray.getJSONObject(0).getString("description");
+					String icon = weatherArray.getJSONObject(0).getString("icon");
+					
+					if(!oldData.contentEquals(data))
+					{
+						oldData = data;
+						weatherList[i] = new BeanWeatherList(oldData, hour, temperatures, description, pressure, humidity, icon);
+					}
+					else
+					{
+						weatherList[i] = new BeanWeatherList("", hour, temperatures, description, pressure, humidity, icon);
+					}
+//					weatherList[i] = new BeanWeatherList(oldData, hour, temperatures, description, pressure, humidity, icon);
+				}
+				
+				WeatherListAdapter adapter = new WeatherListAdapter(adapterActivity, weatherList);
+				lstWeather.setAdapter(adapter);
+			}
+			catch (JSONException e) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Toast.makeText(getActivity(), getResources().getString(R.string.msg_no_informacion), Toast.LENGTH_SHORT).show();
+			}
+    	}
+    	
+    	class WeatherListAdapter extends ArrayAdapter<Object>
+    	{
+    		Activity context;
+    		BeanWeatherList list[];
+    		String imageUri = "http://openweathermap.org/img/w/";
+    		
+    		public WeatherListAdapter(Activity context, BeanWeatherList[] list) 
+    		{
+				super(context, R.layout.weather_row_adapter, list);
+				this.context = context;
+				this.list = list;
+			}
+
+			@Override
+			public View getView(int position, View convertView, ViewGroup parent) 
+			{
+				LayoutInflater inflater = context.getLayoutInflater();
+				View item = inflater.inflate(R.layout.weather_row_adapter, null);
+				
+				ImageView imageView = (ImageView) item.findViewById(R.id.imageView1);
+				TextView txtData = (TextView) item.findViewById(R.id.textView1);
+				TextView txtHour = (TextView) item.findViewById(R.id.textView2);
+				TextView txtTemperature = (TextView) item.findViewById(R.id.textView3);
+				TextView txtDescription = (TextView) item.findViewById(R.id.textView4);
+				TextView txtPressure = (TextView) item.findViewById(R.id.textView5);
+				TextView txtHumidity = (TextView) item.findViewById(R.id.textView6);
+				
+				Picasso.with(getActivity()).load(imageUri + list[position].getIcon() + ".png").into(imageView);
+
+				if(list[position].getData().contentEquals(""))
+				{
+					txtData.setHeight(0);
+				}
+				else
+				{
+					txtData.setText(getFormattedData(list[position].getData()));
+				}
+				
+				txtHour.setText(list[position].getHour() + "h");
+				txtTemperature.setText(list[position].getTemperature());
+				txtDescription.setText(list[position].getDescription());
+				txtPressure.setText(pressure + list[position].getPressure() + "hPa");
+				txtHumidity.setText(humidity + list[position].getHumidity() + "%");
+				
+				return item;
+			}
+    		
+			public String getFormattedData(String data)
+			{
+				String[] dataReceived = data.split("-");
+				return dataReceived[2] + "-" + dataReceived[1] + "-" + dataReceived[0];
+			}
+			
+			public ArrayList<String> addDaysToDate()
+			{
+				Calendar c = Calendar.getInstance();
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+				ArrayList<String> dates = new ArrayList<String>();
+				
+				dates.add(format.format(c.getTime()));
+				for(int i = 0; i < 5; i++)
+				{
+					c.add(Calendar.DAY_OF_YEAR, 1);
+					String date = format.format(c.getTime());
+					dates.add(date);
+				}
+
+				return dates;
+			}
+    	}
+    }
+    
     
     public static class BurbleFragment extends Fragment implements SensorEventListener
     {
@@ -595,12 +943,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     
     public static class PlaceholderFragment extends Fragment 
     {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-    	//----- Variables
-        private static final String ARG_SECTION_NUMBER = "section_number";
         BeanCatalog[] datos;
         
         //----- Elements
