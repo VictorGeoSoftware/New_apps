@@ -1,0 +1,54 @@
+<resources>
+
+    <string name="app_name">Zubehör</string>
+	<string name="title_section1">Abschnitt 1</string>
+	<string name="title_section2">Abschnitt 2</string>
+	<string name="title_section3">Abschnitt 3</string>
+	<string name="action_settings">Einstellungen</string>
+	<string name="catalog">Katalog</string>
+	<string name="compass">Kompass</string>
+	<string name="burble_level">Libelle</string>
+	<string name="title">Titel</string>
+	<string name="description">Beschreibung</string>
+	<string name="base_datos">Datenbank</string>
+	<string name="base_datos_des">Leistungsstarke Datenbank zum Speichern topographische Punkte, und verwenden Sie sie in allen meinen Vermessungsanwendungen. In einem Ort, können Sie alle Informationen die Sie benötigen, speichern können, und haben es immer zur Hand.</string>
+	<string name="asistente">Assistent Einsatz</string>
+	<string name="asistente_des">Vollständige Vermessung Manager, der alle notwendigen Werkzeuge für Layout-und Datenerfassung im Feld umfasst.</string>
+	<string name="geodesia">Geodäsie</string>
+	<string name="geodesia_des">Anwendung für alle Arten von geodätischen Berechnungen. Generiert einen ausführlichen Bericht im txt-Format, mit dem gesamten Ablauf der Berechnungen.</string>
+	<string name="informes">Information</string>
+	<string name="informes_des">Anwendung auf Berichte und Artikel zu erzeugen, in jeder Situation, wo Sie mit Ihrem Smartphone sind. Sie können auch ein Bild hinzufügen.</string>
+	<string name="nivelaciones">Topografie - Nivelaciones</string>
+	<string name="nivelaciones_des">Vermessung Nivellierung. Spezialwerkzeuge für Straßen und Eisenbahnen. Die im Feld gesammelten Daten können sie in eine Textdatei zu brennen.</string>
+	<string name="resenas">Topographische Bewertungen</string>
+	<string name="resenas_des">Komplettes Werkzeug zum Erzeugen von Bewertungen topographische Datenbanken und ein PDF mit allen Informationen Basis.</string>
+	<string name="datum">Datum</string>
+	<string name="datum_des">Anwendung entwickelt, um zwischen verschiedenen DATUM Koordinaten zu migrieren, durch eine Ähnlichkeitstransformation. Ideal für den Einsatz in Bereichen, die Umsetzung der neuen Bezugssystem werden.</string>
+	<string name="levantamientos">Umfragen</string>
+	<string name="levantamientos_des">Notieren Sie alle Ihre Beobachtungen, egal, welche Art von Instrument haben können! Alle Beobachtungen werde Ihrer Arbeit immer zur Verfügung, um sie in eine Textdatei zu werfen, und sogar auf der Traverse zu berechnen und die Koordinaten der beobachteten Punkte.</string>
+	<string name="copmrar_app">Kaufen App</string>
+	<string name="msg_comprar_app">Wählen Sie von der Website möchte die Anwendung zu kaufen. Von Geosoftware Sie können über PayPal bezahlen.</string>
+	<string name="google_play">Spielen Google</string>
+	<string name="geosoftware">Geosoftware</string>
+	<string name="azimut">Azimut</string>
+	<string name="angulo_vertical">Vertikalwinkel</string>
+	<string name="inclinacion">Tilt</string>
+	<string name="grados_cente">Absolventen</string>
+	<string name="grados_sexa">Sexagesimalgrad</string>
+	<string name="meteorologia">Meteorologie</string>
+	<string name="msg_no_internet">Internet, um Informationen zu erhalten, benötigt wird.</string>
+	<string name="msg_consultando_informacion">Beratung Informationen. Bitte warten Sie.</string>
+	<string name="msg_no_informacion">Es war nicht in der Lage, alle Informationen zu erhalten.</string>
+	<string name="nombre_ciudad">Stadt Name</string>
+	<string name="temperatura">Temperatur</string>
+	<string name="cielo">Himmel</string>
+	<string name="presion">Druck</string>
+	<string name="humedad">Feuchtigkeit</string>
+	<string name="leyendo_datos">Das Lesen von Daten</string>
+
+	<string name="sobre_mi">Über mich</string>
+	<string name="aceptar">Akzeptieren</string>
+	<string name="presen1">Android-Anwendungsentwickler, spezialisiert auf dem Gebiet der Vermessung, Vermessungswesen und Bauingenieurwesen.</string>
+	<string name="presen2">Wenn Sie eine Anwendung oder ein Werkzeug benötigen, klicken Sie auf den unten aufgeführten E-Mail.</string>
+
+</resources>

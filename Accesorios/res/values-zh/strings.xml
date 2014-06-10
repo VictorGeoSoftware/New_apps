@@ -1,0 +1,54 @@
+<resources>
+
+    <string name="app_name">饰品</string>
+	<string name="title_section1">第1节</string>
+	<string name="title_section2">第2节</string>
+	<string name="title_section3">第3节</string>
+	<string name="action_settings">设置</string>
+	<string name="catalog">目录</string>
+	<string name="compass">指南针</string>
+	<string name="burble_level">气泡水平仪</string>
+	<string name="title">标题</string>
+	<string name="description">描述</string>
+	<string name="base_datos">数据库</string>
+	<string name="base_datos_des">强大的数据库，用于存储的地形点，并用它们在我所有的测量应用。在一个地方，你可以存储所有你需要的信息，并且总是有它在手。</string>
+	<string name="asistente">支联会助理</string>
+	<string name="asistente_des">全部测量管理器，它包括了所有的布局和数据采集领域的必要工具。</string>
+	<string name="geodesia">大地测量</string>
+	<string name="geodesia_des">申请各类大地测量计算。生成txt格式的详细报告，以计算整个序列。</string>
+	<string name="informes">信息</string>
+	<string name="informes_des">应用程序生成的报告和文章，在你与你的智能手机的任何情况。您可以将图片甚至可以添加到它。</string>
+	<string name="nivelaciones">地形 - 色阶</string>
+	<string name="nivelaciones_des">测量练级。专用工具的公路和铁路。在现场收集的数据可以将它们刻录到一个文本文件中。</string>
+	<string name="resenas">地形评论</string>
+	<string name="resenas_des">完整的工具，用于生成评论的地形数据库，并生成所有的信息库的PDF。</string>
+	<string name="datum">基准</string>
+	<string name="datum_des">应用程序设计，不同的原点坐标之间迁移通过相似变换。非常适合用于正在实施新的参考系统领域。</string>
+	<string name="levantamientos">调查</string>
+	<string name="levantamientos_des">记录你所有的意见，不管是什么样的仪器可能有！尽情工作的所有观测值始终可以转储到一个文本文件，甚至计算出导线，并已观测点的坐标。</string>
+	<string name="copmrar_app">购买应用程序</string>
+	<string name="msg_comprar_app">从网站选择想购买的应用程序。从Geosoftware您可以通过PayPal支付。</string>
+	<string name="google_play">玩谷歌</string>
+	<string name="geosoftware">Geosoftware</string>
+	<string name="azimut">方位</string>
+	<string name="angulo_vertical">垂直角度</string>
+	<string name="inclinacion">倾斜</string>
+	<string name="grados_cente">梯度</string>
+	<string name="grados_sexa">六十进制的度数</string>
+	<string name="meteorologia">气象</string>
+	<string name="msg_no_internet">互联网获取信息是必要的。</string>
+	<string name="msg_consultando_informacion">咨询信息。请稍候。</string>
+	<string name="msg_no_informacion">但一直没能获得任何信息。</string>
+	<string name="nombre_ciudad">城市名称</string>
+	<string name="temperatura">温度</string>
+	<string name="cielo">天空</string>
+	<string name="presion">压力</string>
+	<string name="humedad">湿气</string>
+	<string name="leyendo_datos">读取数据</string>
+	
+	<string name="sobre_mi">关于我</string>
+	<string name="aceptar">接受</string>
+	<string name="presen1">Android应用程序开发人员，专注于测绘，测绘领域，土木工程</string>
+	<string name="presen2">如果您需要任何应用程序或工具，请单击下面列出的电子邮件</string>
+
+</resources>

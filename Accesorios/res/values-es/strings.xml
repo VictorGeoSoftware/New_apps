@@ -54,13 +54,9 @@
 	<string name="humedad">Humedad</string>
 	<string name="leyendo_datos">Leyendo datos</string>
 	
-	<string name="yo">Víctor Palma Carrasco</string>
-	
 	<string name="sobre_mi">Sobre mi</string>
 	<string name="aceptar">Aceptar</string>
 	<string name="presen1">Desarrollador de aplicaciones Android, especializado en el ámbito de la Topografía, Geodesia, e Ingeniería Civil.</string>
 	<string name="presen2">Si necesitas cualquier aplicación o herramienta, haz click sobre el correo electrónico que aparece abajo.</string>
-	<string name="correo">vpalmacarrasco@gmail.com</string>
-	
 	
 </resources>

@@ -1,0 +1,54 @@
+<resources>
+
+	<string name="app_name">Accessoires</string>
+	<string name="title_section1">Section 1</string>
+	<string name="title_section2">Section 2</string>
+	<string name="title_section3">Section 3</string>
+	<string name="action_settings">Paramètres</string>
+	<string name="catalog">Catalogue</string>
+	<string name="compass">Boussole</string>
+	<string name="burble_level">Niveau à bulle</string>
+	<string name="title">Titre</string>
+	<string name="description">Description</string>
+	<string name="base_datos">Base de données</string>
+	<string name="base_datos_des">Base de données puissante pour le stockage des points topographiques, et les utiliser dans toutes mes applications d`arpentage. Dans un endroit, vous pouvez stocker toutes les informations dont vous avez besoin, et avoir toujours à portée de main.</string>
+	<string name="asistente">Mise adjoint</string>
+	<string name="asistente_des">Gestionnaire d`arpentage complet, qui comprend tous les outils nécessaires pour la mise en page et la collecte de données dans le domaine.</string>
+	<string name="geodesia">Géodesie</string>
+	<string name="geodesia_des">Demande à tous les types de calculs géodésiques. Génère un rapport détaillé au format txt, avec la totalité de la séquence de calculs.</string>
+	<string name="informes">Informations</string>
+	<string name="informes_des">Application pour générer des rapports et articles, dans n`importe quelle situation où vous êtes avec votre smartphone. Vous pouvez même ajouter une photo à elle.</string>
+	<string name="nivelaciones">Topographie - Nivelaciones</string>
+	<string name="nivelaciones_des">Géomètre nivellement. Outils spéciaux pour les routes et les chemins de fer. Les données recueillies sur le terrain peuvent les graver sur un fichier texte.</string>
+	<string name="resenas">Avis topographiques</string>
+	<string name="resenas_des">Outil complet pour générer commentaires bases de données topographiques, et de générer un fichier PDF avec toute la base de l`information.</string>
+	<string name="datum">Données</string>
+	<string name="datum_des">Application conçue pour se déplacer entre les différentes coordonnées de référence, par une transformation de similitude. Idéal pour une utilisation dans les zones qui appliquent nouveau système de référence.</string>
+	<string name="levantamientos">Enquêtes</string>
+	<string name="levantamientos_des">Notez toutes vos observations, peu importe le type d`instrument peut avoir! Aurez toutes les observations de votre travail toujours disponible pour la jeter dans un fichier texte, et même de calculer le déplacement, et les coordonnées des points observés.</string>
+	<string name="copmrar_app">Acheter app</string>
+	<string name="msg_comprar_app">Sélectionnez à partir du site voudrait acheter l`application. De Geosoftware Vous pouvez payer par PayPal.</string>
+	<string name="google_play">Jouer Google</string>
+	<string name="geosoftware">Geosoftware</string>
+	<string name="azimut">Azimut</string>
+	<string name="angulo_vertical">Angle vertical</string>
+	<string name="inclinacion">Tilt</string>
+	<string name="grados_cente">Diplômés</string>
+	<string name="grados_sexa">Degrés sexagésimaux</string>
+	<string name="meteorologia">Météorologie</string>
+	<string name="msg_no_internet">Internet pour obtenir des informations est nécessaire.</string>
+	<string name="msg_consultando_informacion">La consultation d`informations. S`il vous plaît attendre.</string>
+	<string name="msg_no_informacion">Il n`a pas été en mesure d`obtenir toutes les informations.</string>
+	<string name="nombre_ciudad">Nom de ville</string>
+	<string name="temperatura">Température</string>
+	<string name="cielo">Ciel</string>
+	<string name="presion">Pression</string>
+	<string name="humedad">Humidité</string>
+	<string name="leyendo_datos">La lecture des données</string>
+
+	<string name="sobre_mi">À propos de moi</string>
+	<string name="aceptar">Accepter</string>
+	<string name="presen1">Développeur d`applications Android spécialisée dans le domaine de l`arpentage, d`arpentage et de génie civil.</string>
+	<string name="presen2">Si vous avez besoin n`importe quelle application ou un outil, cliquez sur l`e-mail indiquée ci-dessous.</string>
+
+</resources>

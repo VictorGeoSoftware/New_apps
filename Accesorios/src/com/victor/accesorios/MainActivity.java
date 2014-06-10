@@ -31,6 +31,8 @@ import java.util.TooManyListenersException;
 
 
 
+
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -161,8 +163,53 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_settings) 
+        {
+        	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater inflater = getLayoutInflater();
+            View layout = inflater.inflate(R.layout.about_me_view, null);
+            builder.setView(layout);
+            
+            ImageView imageView = (ImageView) layout.findViewById(R.id.imageView1);
+            TextView txtMail = (TextView) layout.findViewById(R.id.textView4);
+            
+            imageView.setOnClickListener(new View.OnClickListener()
+            {
+				@Override
+				public void onClick(View v) 
+				{
+			    	Intent i = new Intent(Intent.ACTION_VIEW);
+			    	String ruta = "http://www.geosoftware.es";
+			    	i.setData(Uri.parse(ruta));
+			    	startActivity(i);
+				}
+			});
+            
+            txtMail.setOnClickListener(new View.OnClickListener()
+            {
+				@Override
+				public void onClick(View v) 
+				{
+					Intent emailIntent = new Intent(Intent.ACTION_SEND);
+					
+					emailIntent.setData(Uri.parse("mailto:"));
+					emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"vpalmacarrasco@gmail.com"});
+					emailIntent.setType("message/rfc822");
+					
+					startActivity(Intent.createChooser(emailIntent, "Email "));
+				}
+			});
+            
+            builder.setPositiveButton(getResources().getString(R.string.aceptar), new OnClickListener()
+            {
+				@Override
+				public void onClick(DialogInterface dialog, int which) 
+				{
+					dialog.cancel();
+				}
+			});
+            
+            builder.show();
         }
         return super.onOptionsItemSelected(item);
     }

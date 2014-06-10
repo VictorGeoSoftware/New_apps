@@ -1,0 +1,54 @@
+<resources>
+
+    <string name="app_name">Acessórios</string>
+	<string name="title_section1">Seção 1</string>
+	<string name="title_section2">Seção 2</string>
+	<string name="title_section3">Seção 3</string>
+	<string name="action_settings">Configurações</string>
+	<string name="catalog">Catálogo</string>
+	<string name="compass">Bússola</string>
+	<string name="burble_level">Nível de bolha</string>
+	<string name="title">Título</string>
+	<string name="description">Descrição</string>
+	<string name="base_datos">Banco de dados</string>
+	<string name="base_datos_des">Poderoso banco de dados para armazenar pontos topográficos, e usá-los em todas as minhas aplicações de levantamento. Em um lugar, você pode armazenar todas as informações que você precisa, e tê-lo sempre à mão.</string>
+	<string name="asistente">Stake Assistant</string>
+	<string name="asistente_des">Gerente levantamento completo, que inclui todas as ferramentas necessárias para o layout e coleta de dados no campo.</string>
+	<string name="geodesia">Geodésia</string>
+	<string name="geodesia_des">Aplicação para todos os tipos de cálculos geodésicos. Gera um relatório detalhado em formato txt, com toda a seqüência de cálculos.</string>
+	<string name="informes">Informações</string>
+	<string name="informes_des">Aplicação para gerar relatórios e artigos, em qualquer situação em que você está com o seu smartphone. Você pode até mesmo adicionar uma imagem a ele.</string>
+	<string name="nivelaciones">Topografia - Nivelaciones</string>
+	<string name="nivelaciones_des">Levantamento de nivelamento. Ferramentas especiais para estradas e ferrovias. Os dados coletados no campo pode gravá-los em um arquivo de texto.</string>
+	<string name="resenas">Topográficos Comentários</string>
+	<string name="resenas_des">Completa ferramenta para a geração de bases de dados topográficos comentários, e gerar um PDF com toda a base de informações.</string>
+	<string name="datum">Dado</string>
+	<string name="datum_des">Aplicação projetado para migrar entre as diferentes coordenadas dado, através de uma transformação de similaridade. Ideal para uso em áreas que estão implementando novo sistema de referência.</string>
+	<string name="levantamientos">Surveys</string>
+	<string name="levantamientos_des">Anote todas as suas observações, não importa que tipo de instrumento pode ter! Vai Todas as observações de seu trabalho sempre disponível para despejá-lo em um arquivo de texto, e até mesmo para calcular a travessia, e as coordenadas dos pontos observados.</string>
+	<string name="copmrar_app">Comprar aplicativo</string>
+	<string name="msg_comprar_app">Selecione a partir do site gostaria de comprar o aplicativo. De Geosoftware Você pode pagar através do PagSeguro.</string>
+	<string name="google_play">Google Play</string>
+	<string name="geosoftware">Geosoftware</string>
+	<string name="azimut">Azimute</string>
+	<string name="angulo_vertical">Ângulo vertical</string>
+	<string name="inclinacion">Inclinar</string>
+	<string name="grados_cente">Graduados</string>
+	<string name="grados_sexa">Graus sexagesimais</string>
+	<string name="meteorologia">Meteorologia</string>
+	<string name="msg_no_internet">Internet para obter informações é necessário.</string>
+	<string name="msg_consultando_informacion">Consultoria informações. Por favor, aguarde.</string>
+	<string name="msg_no_informacion">Ele não foi capaz de obter qualquer informação.</string>
+	<string name="nombre_ciudad">Nome da Cidade,</string>
+	<string name="temperatura">Temperatura</string>
+	<string name="cielo">Céu</string>
+	<string name="presion">Pressão</string>
+	<string name="humedad">Umidade</string>
+	<string name="leyendo_datos">Leitura de dados</string>
+
+	<string name="sobre_mi">Sobre mim</string>
+	<string name="aceptar">Aceitar</string>
+	<string name="presen1">Desenvolvedor de aplicativos Android especializada na área de Agrimensura, Topografia e Engenharia Civil.</string>
+	<string name="presen2">Se você precisar de qualquer aplicativo ou ferramenta, clique no e-mail listado abaixo.</string>
+	
+</resources>

@@ -1,0 +1,54 @@
+<resources>
+
+    <string name="app_name">Аксессуары</string>
+	<string name="title_section1">Раздел 1</string>
+	<string name="title_section2">Раздел 2</string>
+	<string name="title_section3">Раздел 3</string>
+	<string name="action_settings">Настройки</string>
+	<string name="catalog">Каталог</string>
+	<string name="compass">Компас</string>
+	<string name="burble_level">Уровень пузыря</string>
+	<string name="title">Название</string>
+	<string name="description">Описание</string>
+	<string name="base_datos">База данных</string>
+	<string name="base_datos_des">Мощная база данных для хранения топографических точек, и использовать их во всех моих геодезических приложений. В одном месте, вы можете хранить всю необходимую информацию, и всегда иметь его под рукой.</string>
+	<string name="asistente">Помощник Ставка</string>
+	<string name="asistente_des">Полный менеджер по межеванию, которая включает в себя все необходимые инструменты для разметки и сбора данных в этой области.</string>
+	<string name="geodesia">Геодезия</string>
+	<string name="geodesia_des">Применение для всех типов геодезических расчетов. Формирует подробный отчет в формате TXT, со всей последовательностью вычислений.</string>
+	<string name="informes">Информация</string>
+	<string name="informes_des">Применение для генерации отчетов и статей, в любой ситуации, где вы находитесь с помощью смартфона. Вы даже можете добавить картинку к нему.</string>
+	<string name="nivelaciones">Топография - Nivelaciones</string>
+	<string name="nivelaciones_des">Геодезия выравнивания. Специальный инструмент для автомобильных и железных дорог. Данные, собранные в области можете записать их в текстовый файл.</string>
+	<string name="resenas">Топографическая Отзывы</string>
+	<string name="resenas_des">Полный инструмент для создания отзывы топографические базы данных и генерировать PDF со всеми информационной базы.</string>
+	<string name="datum">Данная величина</string>
+	<string name="datum_des">Применение предназначен для мигрировать между различными параметрами, Datum, через преобразования подобия. Идеально подходит для использования в областях, которые внедряют новые системы отсчета.</string>
+	<string name="levantamientos">Опросы</string>
+	<string name="levantamientos_des">не Запишите все ваши замечания, независимо от того, какой инструмент может иметь! Буду Все наблюдения вашей работы всегда готовы сбросить ее в текстовый файл, и даже вычислить траверс, и координаты наблюдаемых точек.</string>
+	<string name="copmrar_app">Купить приложение</string>
+	<string name="msg_comprar_app">Выберите с сайта хотели бы приобрести приложение. От Geosoftware Вы можете оплатить через PayPal.</string>
+	<string name="google_play">Играть компании Google</string>
+	<string name="geosoftware">Geosoftware</string>
+	<string name="azimut">Азимут</string>
+	<string name="angulo_vertical">Вертикальный угол</string>
+	<string name="inclinacion">Тент</string>
+	<string name="grados_cente">Грады</string>
+	<string name="grados_sexa">Шестидесятеричной градусов</string>
+	<string name="meteorologia">Метеорология</string>
+	<string name="msg_no_internet">Интернет для получения информации не требуется.</string>
+	<string name="msg_consultando_informacion">Консалтинг информацию. Пожалуйста, подождите.</string>
+	<string name="msg_no_informacion">Он не был в состоянии получить любую информацию.</string>
+	<string name="nombre_ciudad">Название города,</string>
+	<string name="temperatura">Температура</string>
+	<string name="cielo">Небо</string>
+	<string name="presion">Давление</string>
+	<string name="humedad">Влажность</string>
+	<string name="leyendo_datos">Чтение данных</string>
+
+	<string name="sobre_mi">Обо мне</string>
+	<string name="aceptar">принимать</string>
+	<string name="presen1">Android-разработчик приложения, специализирующаяся в области геодезии, геодезии, и гражданское строительство.</string>
+	<string name="presen2">Если вам нужно любое приложение или инструмент, нажмите на адрес электронной почты, перечисленных ниже.</string>
+	
+</resources>

@@ -1,0 +1,54 @@
+<resources>
+
+    <string name="app_name">Accessories</string>
+	<string name="title_section1">Section 1</string>
+	<string name="title_section2">Section 2</string>
+	<string name="title_section3">Section 3</string>
+	<string name="action_settings">Settings</string>
+	<string name="catalog">Catalog</string>
+	<string name="compass">Compass</string>
+	<string name="burble_level">Bubble level</string>
+	<string name="title">Title</string>
+	<string name="description">Description</string>
+	<string name="base_datos">Database</string>
+	<string name="base_datos_des">Powerful database for storing topographic points, and use them in all my surveying applications. In one place, you can store all the information you need, and always have it at hand.</string>
+	<string name="asistente">Topographic Assistant</string>
+	<string name="asistente_des">Full surveying manager, which includes all the necessary tools for layout and data collection in the field.</string>
+	<string name="geodesia">Geodesy</string>
+	<string name="geodesia_des">Application for all types of geodetic calculations. Generates a detailed report in txt format, with the entire sequence of calculations.</string>
+	<string name="informes">Reports</string>
+	<string name="informes_des">Application to generate reports and articles, in any situation where you are with your smartphone. You can even add a picture to it.</string>
+	<string name="nivelaciones">Topography – Levels</string>
+	<string name="nivelaciones_des">Surveying leveling. Special tools for roads and railways. The data collected in the field can burn them to a text file.</string>
+	<string name="resenas">Topographic Reviews</string>
+	<string name="resenas_des">Complete tool for generating reviews topographic databases, and generate a PDF with all the information base.</string>
+	<string name="datum">Datum</string>
+	<string name="datum_des">Application designed to migrate between different DATUM coordinates, through a similarity transformation. Ideal for use in areas that are implementing new reference system.</string>
+	<string name="levantamientos">Surveying</string>
+	<string name="levantamientos_des">Record all your observations, no matter what kind of instrument you have! All observations of your work always available to dump it into a text file, and even to calculate the traverse, and the coordinates of the observed points.</string>
+	<string name="copmrar_app">Buy app</string>
+	<string name="msg_comprar_app">Select from website would like to purchase the application. From Geosoftware You can pay through PayPal.</string>
+	<string name="google_play">Play Google</string>
+	<string name="geosoftware">Geosoftware</string>
+	<string name="azimut">Azimuth</string>
+	<string name="angulo_vertical">Vertical angle</string>
+	<string name="inclinacion">Tilt</string>
+	<string name="grados_cente">Grads</string>
+	<string name="grados_sexa">Sexagesimal degrees</string>
+	<string name="meteorologia">Meteorology</string>
+	<string name="msg_no_internet">Internet to obtain information is needed.</string>
+	<string name="msg_consultando_informacion">Consulting information. Please wait.</string>
+	<string name="msg_no_informacion">It has not been able to obtain any information.</string>
+	<string name="nombre_ciudad">City Name</string>
+	<string name="temperatura">Temperature</string>
+	<string name="cielo">Sky</string>
+	<string name="presion">Pressure</string>
+	<string name="humedad">Moisture</string>
+	<string name="leyendo_datos">Reading data</string>
+
+	<string name="sobre_mi">About m</string>
+	<string name="aceptar">OK</string>
+	<string name="presen1">Android developer specializing in the field of Surveying, Geodesy, and Civil Engineering.</string>
+	<string name="presen2">If you need any application or tool, click on the email listed below.</string>
+	
+</resources>
