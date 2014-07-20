@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginTop="5dip"
+    android:layout_marginLeft="5dip"
+    android:layout_marginRight="5dip"
+    android:layout_marginBottom="5dip"
+	android:background="@drawable/shape_item_listview" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingTop="5dip"
+        android:paddingBottom="5dip"
+        android:text="@string/country_code"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="20dip" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/select_symblol"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginRight="5dip" />
+
+</LinearLayout>

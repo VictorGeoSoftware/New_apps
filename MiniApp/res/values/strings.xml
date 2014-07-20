@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MiniApp</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    
+	<string name="fedex">Fedex</string>
+	<string name="reload">Reload</string>
+	<string name="country_code">Country code</string>
+	
+	<string name="back">Back</string>
+	<string name="information">Information</string>
+	<string name="products">Products</string>
+	<string name="product_id">Product ID</string>
+	
+	<string name="select_symblol">></string>
+	<string name="error">Error</string>
+	
+	<string name="airplanes">Airplanes</string>
+	<string name="kg">KG</string>
+	
+	<string name="about_me">About me</string>
+	<string name="victor_palma">Víctor Palma Carrasco</string>
+	<string name="android_developer">Android Developer</string>
+	<string name="dialog_working">AlertDialog operativo para comprobar que la aplicación no se bloquea en ningún momento.</string>
+    
+</resources>
