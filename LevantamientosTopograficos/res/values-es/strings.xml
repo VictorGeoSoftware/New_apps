@@ -1,0 +1,116 @@
+<resources>
+
+    <string name="app_name">Levantamientos topográficos</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="levantamientos">Levantamientos</string>
+    <string name="comenzar_trabajo">Comenzar un nuevo trabajo</string>
+    <string name="msg_comenzar_trabajo">Introduzca el nombre del nuevo levantamiento topográfico a registrar, y a continuación, selecciónelo en la lista para trabajar sobre él</string>
+	<string name="lista_trabajos">Lista de trabajos registrados</string>
+	<string name="anadir">Añadir</string>
+	
+	<string name="seleccionar_trabajo">Seleccionar trabajo</string>
+	<string name="msg_seleccionar_trabajo">Seleccione qué desea hacer con el trabajo seleccionado</string>
+	<string name="anadir_datos">Añadir datos</string>
+	<string name="calcular_poligonal">Calculo de puntos</string>
+	<string name="borrar_trabajo">Borrar trabajo</string>
+	<string name="registro_existe">Este registro ya existe</string>
+	
+	<string name="registro_datos">Registro de datos</string>
+	<string name="poligonal">Poligonal</string>
+	<string name="subtitulo_poligonal">Registra primero el nombre de la base o referencia a observar, y después sus valores de observación</string>
+	<string name="observaciones">Observaciones</string>
+	<string name="lista_estaciones">Lista de estaciones añadidas</string>
+	<string name="lista_referencias">Lista de referencias añadidas</string>
+	<string name="altura_estacion">Altura de estación</string>
+	<string name="altura_mira">Altura de mira</string>
+	
+	<string name="observar_punto">Observar punto</string>
+	<string name="base_referencia">Base o referencia</string>
+	<string name="lista_puntos">Lista de observaciones</string>
+	<string name="base">Base</string>
+	<string name="referencia">Referencia</string>
+	
+	<string name="msg_campos_vacios">No pueden dejarse campos vacíos</string>
+	<string name="msg_existe_registro">El registro ya existe</string>
+	
+	<string name="modificar_estacion">Modificar estación</string>
+	<string name="msg_modificar_estacion">Selecciona lo que deseas hacer con la estación</string>
+	<string name="modificar_nombre">Modificar nombre</string>
+	<string name="borrar_estacion">Borrar estación</string>
+	
+	<string name="actualizar_estacion">Actualizar estación</string>
+	<string name="msg_actualizar_estacion">Introduce el nuevo nombre de la estación. Las coordenadas de la estación se añadirán en el apartado de cálculos</string>
+	<string name="aceptar">Aceptar</string>
+	<string name="cancelar">Cancelar</string>
+	
+	<string name="observar_estacion">Observación a estación</string>
+	<string name="estacion_actual">Estación actual</string>
+	<string name="estacion_observar">Estación a observar</string>
+	<string name="msg_observar_estacion">Selecciona el tipo de estación a la que quieres observar, e introduce los datos observados</string>
+	<string name="circulo_directo">Círculo directo</string>
+	<string name="circulo_inverso">Círculo inverso</string>
+	<string name="angulo_horizontal">Angulo horizontal</string>
+	<string name="angulo_vertical">Angulo vertical</string>
+	<string name="distancia">Distancia geométrica</string>
+	
+	<string name="msg_faltan_alturas">Falta la altura de estación y la altura de mira</string>
+	
+	<string name="msg_observar_punto">Introduce los datos observados. Presiona el botón para añadir la lectura en círculo inverso.</string>
+	<string name="nombre_punto">Nombre del punto</string>
+	<string name="punto">Punto</string>
+	
+	<string name="modificar_punto">Modificar punto</string>
+	<string name="msg_modificar_punto">Seleccione qué desea hacer con el punto seleccionado</string>
+	<string name="actualizar">Actualizar</string>
+	<string name="borrar">Borrar</string>
+	
+	<string name="actualizar_punto">Actualizar punto</string>
+	<string name="msg_actualizar_punto">Introduzca los nuevos datos del punto</string>
+	
+	<string name="borrar_registros">Borrar registros</string>
+	<string name="msg_borrar_registros">¿Estás seguro? Se eliminarán también los registros asociados.</string>
+	
+	<string name="msg_calculo_poligonal">Introduce las coordenadas de los puntos de referencia, y de la primera y última base de la poligonal.</string>
+	<string name="msg_calculo_poligonal2">Para ello, manten presionada la fila de la estación correspondiente.</string>
+	<string name="estaciones_referencias_anadidas">Estaciones y referencias añadidas</string>
+	<string name="calcular_poligonal_puntos">Calcular poligonal y puntos</string>
+	
+	<string name="actualizar_coordenadas">Actualizar coordenadas</string>
+	<string name="msg_actualizar_coordenadas">Introduzca las nuevas coordenadas de la estación</string>
+	<string name="x">X</string>
+	<string name="y">Y</string>
+	<string name="z">Z</string>
+	<string name="consulta_base_datos">Consulta a base de datos</string>
+	<string name="filtrar_nombre_punto">Filtrar por nombre de estación</string>
+	<string name="selecciona_estacion">Selecciona una estación para obtener sus coordenadas</string>
+	
+	<string name="atencion">Atención!</string>
+	<string name="msg_no_registros">No se han encontrado registros</string>
+	<string name="no_base_datos">No se encuentra la aplicación Base de Datos. Puedes conseguirla pulsando el botón comprar.</string>
+	<string name="comprar">Comprar</string>
+	
+	<string name="rellenar">Rellenar</string>
+	<string name="coeficiente_esfericidad">Coeficiente de anamorfosis lineal</string>
+	<string name="fichero_generado">Archivo generado</string>
+	<string name="imprimir_registro">Archivo generado</string>
+	<string name="observaciones_almacenadas">Registro de observaciones almacenadas</string>
+	<string name="bases_poligonal">Bases calculadas de la poligonal</string>
+	<string name="msg_bases_poligonal">Para generar un archivo de texto con todas las coordenadas, pulsa el icono de la impresora.</string>
+	
+	<string name="imprimir_observaciones_registradas">Imprimir observaciones registradas</string>
+	<string name="msg_imprimir_observaciones">Introduce el nombre del fichero en el que quieres guardar todos los registros almacenados</string>
+	
+	<string name="imprimir_informe">Imprimir informe</string>
+	<string name="msg_imprimir_informe">Selecciona el tipo de informe que deseas imprimir</string>
+	<string name="observaciones_registradas">Observaciones registradas</string>
+	<string name="poligonal_medicion">Poligonal y medición de puntos</string>
+	
+	<string name="imprimir_poligonal">Imprimir poligonal</string>
+	<string name="msg_imprimir_poligonal">Introduce el nombre del fichero en el que quieres guardar las coordenadas calculadas de la poligonal y de los puntos observados</string>
+	<string name="informe_imprimir_poligonal">Coordenadas de bases y puntos observados</string>
+	<string name="msg_toast_imprimir_poligonal">No se ha calculado ninguna poligonal</string>
+	<string name="lbl_fila_puntos">Manten presionada una fila para modificar datos</string>
+	<string name="imprimir">Imprimir</string>
+
+</resources>
