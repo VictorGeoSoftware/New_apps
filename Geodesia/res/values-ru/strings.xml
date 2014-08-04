@@ -1,0 +1,148 @@
+<resources>
+
+    <string name="app_name">Геодезия</string>
+	<string name="title_section1">Раздел 1</string>
+	<string name="title_section2">Раздел 2</string>
+	<string name="title_section3">Раздел 3</string>
+	<string name="navigation_drawer_open">Открыть навигации ящик</string>
+	<string name="navigation_drawer_close">Закрыть ящик навигации</string>
+	<string name="action_example">Пример действия</string>
+	<string name="action_settings">Настройки</string>
+	
+	<string name="subtitulo_presentacion">Подача заявки</string>
+	<string name="conversion_coordenadas">Преобразования координат</string>
+	<string name="geodesicas_utm">Геодезические к UTM</string>
+	<string name="utm_geodesicas">UTM для геодезической</string>
+	<string name="anamorfosis_lineal">Линейный анаморфоз</string>
+	<string name="coordenadas_geodesicas">Геодезические координаты</string>
+	<string name="coordenadas_utm">UTM координаты</string>
+	<string name="convergencia">Конвергенция меридианов</string>
+	<string name="distancias">Расстояния преобразования</string>
+	<string name="reducida_utm">Расстояние сводится к UTM</string>
+	<string name="utm_reducida">Снижение расстояние UTM</string>
+	
+	<string name="generar_informe">Создать отчет расчета</string>
+	<string name="enviar_informe">Отправить отчет по почте</string>
+	
+	<string name="presentacion1">Применение для всех типов геодезических расчетов и результатов печати в текстовом файле. Эта опция находится в кнопку "меню" на устройстве.</string>
+	<string name="presentacion2">Приложение, разработанное Виктора Карраско Пальма, технические разработки в топографии и Android приложений разработчика, специализирующегося на геодезии, геодезии и строительства.</string>
+	
+	<string name="ficheros_texto">Примеры текстовый файл.</string>
+	<string name="sub_ficheros_texto">Чтобы прочитать координаты из текстового файла, имя файла должно иметь определенную структуру. Нажмите эту коробку, чтобы создать образец файла, в соответствии с используемым инструментом.</string>
+	<string name="geodesicas_utm_pres">Трансформация геодезических координат в UTM координаты, через прямой задачи.</string>
+	
+	<string name="selecciona_informe">Выберите файл образца</string>
+	
+	<string name="nuevo_elipsoide">Добавить новый эллипсоид</string>
+	<string name="anadir_coordenadas">Добавить координаты</string>
+	<string name="desde_archivo">Из файла</string>
+	<string name="introducir_coordenada">Введите координаты</string>
+	<string name="lista_coordenadas">Координаты Список</string>
+	<string name="selecciona_elipsoide">Выберите эллипсоид</string>
+	<string name="borrar_todo">Очистить все</string>
+	<string name="calcular">Вычислять</string>
+	<string name="coordenadas_calculadas">Координаты, вычисленные</string>
+	
+	<string name="latitud">Широта</string>
+	<string name="longitud">Длина</string>
+	<string name="longitud_mc">Центральный меридиан долготы</string>
+	<string name="grados">Степени</string>
+	<string name="minutos">Минут</string>
+	<string name="segundos">Секунды</string>
+	
+	<string name="aceptar">Принимать</string>
+	<string name="cancelar">Отменить</string>
+	<string name="atras">Назад</string>
+	
+	<string name="recuerda">Запомнить</string>
+	<string name="recuerda_hemisferio_sur">В южном полушарии, широта должна быть отрицательной</string>
+	<string name="recuerda_continente_americano">Для Южной Америки, значения длины и длины центрального меридиана, должен быть отрицательным.</string>
+	<string name="no_valores_vacios">Вы не можете оставить пустые значения</string>
+	
+	<string name="selecciona_archivo">Выберите файл</string>
+	<string name="inicio">Инициирование</string>
+	<string name="carpeta">Папка</string>
+	<string name="archivo_texto">Текстовый файл</string>
+	<string name="archivo_desconocido">Неизвестный файл</string>
+	
+	<string name="ruta_actual">Текущий маршрут</string>
+	<string name="accion_no_permitida">Действие не допускается</string>
+	<string name="fichero_de_texto">Текстовый файл</string>
+	<string name="base_datos">База данных</string>
+	<string name="Selecciona_fuente">Выберите, где вы хотите, чтобы получить данные</string>
+	
+	<string name="datos_punto">Точка данных</string>
+	<string name="hint_proyecto_nombre">Название проекта и</string>
+	<string name="lista_encontrados">Список предметов, обнаруженных</string>
+	
+	
+	<string name="atencion">Внимание!</string>
+	<string name="no_base_datos">Применение База данных не доступны</string>
+	<string name="comprar">Купить</string>
+	
+	<string name="msg_landa_mc">Прежде, чем выбрать точку, необходимо ввести длину соответствующего центрального меридиана до того, что вы собираетесь выбрать</string>
+	<string name="introduzca_landa_mc">Введите длину центрального меридиана, соответствующего выбранной системе координат</string>
+	<string name="selecciona_hemisferio_utm">Должно быть UTM координаты, вы также выбрать свой полушарие</string>
+	
+	<string name="msg_valores_incorrectos">Файл имеет неправильные значения в строке</string>
+	
+	<string name="elipsoides">Эллипсоиды</string>
+	<string name="introduce_datos">Введите детали нового эллипсоида</string>
+	<string name="nombre">Название</string>
+	<string name="semieje_a">Большая полуось (а)</string>
+	<string name="aplanamiento_f">Выравнивание (е)</string>
+	<string name="lista_elipsoides">Эллипсоиды сохраняется список</string>
+	<string name="guardar">Экономить</string>
+	<string name="cerrar">Закрывать</string>
+	<string name="presiona_elipsoide">Держите удалить эллипсоид</string>
+	<string name="valor_registrado">Это значение уже зарегистрированы</string>
+	
+	<string name="presiona_coordenada">Нажмите и удерживайте для удаления координат</string>
+	<string name="selecciona_anamorfosis">Выберите анаморфоз</string>
+	<string name="nuevo_valor_anamorfosis">Новое значение анаморфозы</string>
+	<string name="msg_anamorfosis">Если нет анаморфоз не будет выбрано, значение по умолчанию будет 0,9996 (Испания)</string>
+	
+	<string name="anamorfosis">Анаморфоз</string>
+	<string name="datos_anamorfosis">Введите данные, которые вы хотите зарегистрировать новый анаморфное</string>
+	<string name="valor">Значение</string>
+	<string name="valores_anamorfosis">По ценным бумагам зарегистрировал анаморфоз</string>
+	<string name="borrar_fila">Удерживая строку для удаления</string>
+	
+	<string name="fichero_generado">Я подам генерируется</string>
+	<string name="informe_calculo">Отчет Расчет</string>
+	<string name="introduce_nombre">Введите имя файла</string>
+	<string name="ventana_no_informes">В этом окне не генерировать отчеты</string>
+	<string name="no_calculos">Это не произвело никакого расчет</string>
+	
+	<string name="datos_entrada">Ввод данных</string>
+	<string name="proceso_calculo">Процесс Расчет</string>
+	<string name="resultados">Результаты</string>
+	
+	<string name="coordenada_x">Координата Х</string>
+	<string name="coordenada_y">Y координат</string>
+	
+	<string name="debes_seleccionar_hemisferio">Вы должны выбрать полушарие</string>
+	<string name="norte">К северу</string>
+	<string name="sur">Юг</string>
+	
+	<string name="introduzca_valores">Введите значения</string>
+	<string name="iteracion">Итерация</string>
+	<string name="valores_calculados">Расчетные значения</string>
+	<string name="distancias_calculadas">Расстояния, рассчитанные</string>
+	<string name="valores_incorrecto_linea">Да значение не соответствует норме на линии</string>
+	<string name="hemisferio_incorrecto_linea">Правое полушарие не соответствует</string>
+	
+	<string name="msg_distancias_on">Введите расстояние и высоту, соответствующую выбранной системе координат</string>
+	<string name="distancia">Расстояние</string>
+	<string name="distancia_reducida">Снижение расстояние</string>
+	<string name="distancia_utm">Расстояние UTM</string>
+	<string name="altura">Высота</string>
+	<string name="altura_elipsoidal">Эллипсоидальное высота</string>
+	<string name="altura_ortometrica">Ортометрическая высота</string>
+	<string name="coordenadas_geo_distancia">Геодезические координаты и расстояние</string>
+	<string name="coordenadas_utm_distancia">Координаты UTM и расстояние</string>
+	
+	<string name="ejemplo">Пример</string>
+
+
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <TextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="35dip"
+        android:text="@string/elipsoides"
+        android:textColor="#FFFFFFFF"
+        android:gravity="center_vertical"
+        android:background="#773A6734"
+        android:textSize="20sp" />

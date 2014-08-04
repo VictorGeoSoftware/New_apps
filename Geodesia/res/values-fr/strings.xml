@@ -1,0 +1,148 @@
+<resources>
+
+    <string name="app_name">Géodesie</string>
+	<string name="title_section1">Section 1</string>
+	<string name="title_section2">Section 2</string>
+	<string name="title_section3">Section 3</string>
+	<string name="navigation_drawer_open">Ouvrir navigation de tiroir</string>
+	<string name="navigation_drawer_close">Fermer le tiroir navigation</string>
+	<string name="action_example">Exemple d`action</string>
+	<string name="action_settings">Paramètres</string>
+	
+	<string name="subtitulo_presentacion">Présentation de la demande</string>
+	<string name="conversion_coordenadas">Conversion de coordonnées</string>
+	<string name="geodesicas_utm">Géodésiques UTM</string>
+	<string name="utm_geodesicas">UTM à géodésique</string>
+	<string name="anamorfosis_lineal">Anamorphose linéaire</string>
+	<string name="coordenadas_geodesicas">Coordonnées géodésiques</string>
+	<string name="coordenadas_utm">Coordonnées UTM</string>
+	<string name="convergencia">Convergence des méridiens</string>
+	<string name="distancias">Distances de conversion</string>
+	<string name="reducida_utm">Distance réduite à UTM</string>
+	<string name="utm_reducida">Réduction UTM à distance</string>
+	
+	<string name="generar_informe">Générer un rapport de calcul</string>
+	<string name="enviar_informe">Envoyer un rapport par courrier</string>
+	
+	<string name="presentacion1">Demande à tous les types de calculs géodésiques, et les résultats d`impression dans un fichier texte. Cette option se trouve dans le bouton "menu" sur l`appareil.</string>
+	<string name="presentacion2">Application développée par Victor Carrasco Palma, Ingénierie Technique en Topographie et applications Android développeur spécialisé dans l`arpentage, la géodésie et de génie civil.</string>
+	
+	<string name="ficheros_texto">Des exemples de fichier texte.</string>
+	<string name="sub_ficheros_texto">Pour lire les coordonnées d`un fichier texte, le fichier doit avoir une structure spécifique. Cochez cette case pour générer un fichier d`exemple, selon l`outil utilisé.</string>
+	<string name="geodesicas_utm_pres">Transformation de coordonnées géodésiques en coordonnées UTM, par problème direct.</string>
+	
+	<string name="selecciona_informe">Sélectionnez un fichier d`échantillon</string>
+	
+	<string name="nuevo_elipsoide">Ajouter nouvel ellipsoïde</string>
+	<string name="anadir_coordenadas">Ajouter les coordonnées</string>
+	<string name="desde_archivo">À partir du fichier</string>
+	<string name="introducir_coordenada">Entrez coordonner</string>
+	<string name="lista_coordenadas">Coordonnées Liste</string>
+	<string name="selecciona_elipsoide">Ellipsoïde</string>
+	<string name="borrar_todo">Effacer tout</string>
+	<string name="calcular">Calculer</string>
+	<string name="coordenadas_calculadas">Coordonnées calculées</string>
+	
+	<string name="latitud">Latitude</string>
+	<string name="longitud">Longueur</string>
+	<string name="longitud_mc">Longitude du méridien central</string>
+	<string name="grados">Degrés</string>
+	<string name="minutos">Procès-verbal</string>
+	<string name="segundos">Secondes</string>
+	
+	<string name="aceptar">Accepter</string>
+	<string name="cancelar">Annuler</string>
+	<string name="atras">Arrière</string>
+	
+	<string name="recuerda">Rappeler</string>
+	<string name="recuerda_hemisferio_sur">Dans l`hémisphère sud, la latitude doit être négatif</string>
+	<string name="recuerda_continente_americano">Pour les Amériques, les valeurs de longueur et la longueur du méridien central, doivent être négatifs.</string>
+	<string name="no_valores_vacios">Vous ne pouvez pas laisser des valeurs vides</string>
+	
+	<string name="selecciona_archivo">Sélectionnez un fichier</string>
+	<string name="inicio">Initiation</string>
+	<string name="carpeta">Dossier</string>
+	<string name="archivo_texto">Fichier texte</string>
+	<string name="archivo_desconocido">Fichier inconnu</string>
+	
+	<string name="ruta_actual">Route actuelle</string>
+	<string name="accion_no_permitida">Action non autorisée</string>
+	<string name="fichero_de_texto">Fichier texte</string>
+	<string name="base_datos">Base de données</string>
+	<string name="Selecciona_fuente">Sélectionnez l`emplacement où vous souhaitez obtenir les données</string>
+	
+	<string name="datos_punto">Point de données</string>
+	<string name="hint_proyecto_nombre">Nom du projet et</string>
+	<string name="lista_encontrados">Liste des objets trouvés</string>
+	
+	
+	<string name="atencion">Attention!</string>
+	<string name="no_base_datos">La base de données d`application n`est pas disponible</string>
+	<string name="comprar">Acheter</string>
+	
+	<string name="msg_landa_mc">Avant de sélectionner un point, vous devez entrer la longueur du méridien central correspondant au point que vous allez sélectionner</string>
+	<string name="introduzca_landa_mc">Entrez la longueur du méridien central correspondant à la coordonnées sélectionné</string>
+	<string name="selecciona_hemisferio_utm">Devraient être coordonnées UTM, vous pouvez également sélectionner leur hémisphère</string>
+	
+	<string name="msg_valores_incorrectos">Le fichier a des valeurs incorrectes dans la ligne</string>
+	
+	<string name="elipsoides">Ellipsoïdes</string>
+	<string name="introduce_datos">Entrez les détails de la nouvelle ellipsoïde</string>
+	<string name="nombre">Nom</string>
+	<string name="semieje_a">Demi-grand axe (a)</string>
+	<string name="aplanamiento_f">Aplatissement (f)</string>
+	<string name="lista_elipsoides">Ellipsoïdes liste enregistrés</string>
+	<string name="guardar">Sauver</string>
+	<string name="cerrar">Fermer</string>
+	<string name="presiona_elipsoide">Tenir à supprimer un ellipsoïde</string>
+	<string name="valor_registrado">Cette valeur est déjà enregistré</string>
+	
+	<string name="presiona_coordenada">Appuyez et maintenez pour supprimer une coordonnée</string>
+	<string name="selecciona_anamorfosis">Anamorphose</string>
+	<string name="nuevo_valor_anamorfosis">La nouvelle valeur de l`anamorphose</string>
+	<string name="msg_anamorfosis">Si aucune anamorphose n`est pas sélectionnée, la valeur par défaut à 0,9996 (Espagne)</string>
+	
+	<string name="anamorfosis">Anamorphose</string>
+	<string name="datos_anamorfosis">Entrez les données que vous souhaitez enregistrer une nouvelle anamorphique</string>
+	<string name="valor">Valeur</string>
+	<string name="valores_anamorfosis">Titres inscrits anamorphose</string>
+	<string name="borrar_fila">Maintenez une ligne à retirer</string>
+	
+	<string name="fichero_generado">Je fichier généré</string>
+	<string name="informe_calculo">Rapport de calcul</string>
+	<string name="introduce_nombre">Entrez le nom de fichier</string>
+	<string name="ventana_no_informes">Dans cette fenêtre, ne génère pas de rapports</string>
+	<string name="no_calculos">Il n`a pas fait de calcul</string>
+	
+	<string name="datos_entrada">Les données d`entrée</string>
+	<string name="proceso_calculo">Processus de calcul</string>
+	<string name="resultados">Résultats</string>
+	
+	<string name="coordenada_x">Coordonnée X</string>
+	<string name="coordenada_y">Coordonnée Y</string>
+	
+	<string name="debes_seleccionar_hemisferio">Vous devez sélectionner un hémisphère</string>
+	<string name="norte">Nord</string>
+	<string name="sur">Sud</string>
+	
+	<string name="introduzca_valores">Entrez les valeurs</string>
+	<string name="iteracion">Itération</string>
+	<string name="valores_calculados">Les valeurs calculées</string>
+	<string name="distancias_calculadas">Distances calculées</string>
+	<string name="valores_incorrecto_linea">Oui valeur n`est pas correcte sur la ligne</string>
+	<string name="hemisferio_incorrecto_linea">L`hémisphère droit n`est pas en ligne</string>
+	
+	<string name="msg_distancias_on">Entrez la distance et la hauteur correspondant à la coordonnées sélectionné</string>
+	<string name="distancia">Distance</string>
+	<string name="distancia_reducida">Distance réduite</string>
+	<string name="distancia_utm">Distance UTM</string>
+	<string name="altura">Hauteur</string>
+	<string name="altura_elipsoidal">Hauteur ellipsoïdale</string>
+	<string name="altura_ortometrica">Orthométrique</string>
+	<string name="coordenadas_geo_distancia">Coordonnées géodésiques et de la distance</string>
+	<string name="coordenadas_utm_distancia">Coordonnées UTM et la distance</string>
+	
+	<string name="ejemplo">Exemple</string>
+
+
+</resources>
