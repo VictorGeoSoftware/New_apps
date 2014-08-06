@@ -144,5 +144,18 @@
 	<string name="coordenadas_utm_distancia">Coordenadas UTM y distancia</string>
 	
 	<string name="ejemplo">Ejemplo</string>
+	
+	<string name="acimut_distancia">Acimut y distancia</string>
+	<string name="sub_acimut_distancia">Acimut y distancia entre dos puntos</string>
+	<string name="calculo_coordenadas">Cálculo de coordenadas</string>
+	<string name="lista_coordenadas_calculadas">Lista de coordenadas calculadas</string>
+	<string name="resultado">Resultado</string>
+	<string name="msg_dos_puntos">No puedes introducir más de dos puntos</string>
+	
+	<string name="acimut_utm">Acimut UTM</string>
+	<string name="selecciona_hemisferio">Selecciona hemisferio</string>
+	<string name="coordenadas_punto_a">Coordenadas del punto A</string>
+	<string name="observaciones_punto_b">Observaciones al punto B</string>
+	<string name="puntos_encontrados">Puntos encontrados</string>
 
 </resources>

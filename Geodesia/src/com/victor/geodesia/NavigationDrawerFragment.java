@@ -108,7 +108,9 @@ public class NavigationDrawerFragment extends Fragment {
         			new SideBarModel(getString(R.string.convergencia), getString(R.string.geodesicas_utm)),
         			new SideBarModel(getString(R.string.convergencia), getString(R.string.utm_geodesicas)),
         			new SideBarModel(getString(R.string.distancias), getString(R.string.reducida_utm)),
-        			new SideBarModel(getString(R.string.distancias), getString(R.string.utm_reducida))
+        			new SideBarModel(getString(R.string.distancias), getString(R.string.utm_reducida)),
+        			new SideBarModel(getString(R.string.acimut_distancia), getString(R.string.coordenadas_utm)),
+        			new SideBarModel(getString(R.string.calculo_coordenadas), getString(R.string.coordenadas_utm))
         		};
         SideListAdapter adapter = new SideListAdapter(getActivity(), toolsList);
         mDrawerListView.setAdapter(adapter);

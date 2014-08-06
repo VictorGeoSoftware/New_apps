@@ -49,6 +49,7 @@ import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Spinner;
@@ -79,6 +80,8 @@ import android.widget.Toast;
     private static ArrayList<String> convergenceUtmContainerArray = new ArrayList<String>();
     private static ArrayList<String> distRedUtmContainerArray = new ArrayList<String>();
     private static ArrayList<String> distUtmRedContainerArray = new ArrayList<String>();
+    private static ArrayList<String> acimutDistanceContainerArray = new ArrayList<String>();
+    private static String coordinatesComputeContainer = "";
 
     //----- Variables for control each fragment in DialogFragments
     private static int FRAGMENT_SELECTED = 0;
@@ -91,6 +94,8 @@ import android.widget.Toast;
     private static int CONVERGENCE_UTM_FRAGMENT = 6;
     private static int DISTANCE_GEO_FRAGMENT = 7;
     private static int DISTANCE_UTM_FRAGMENT = 8;
+    private static int AZIMUT_DISTANCE_FRAGMENT = 9;
+    private static int COORDINATE_COMPUTE_FRAGMENT = 10;
     
     
     //----- Strings for keep calculus report of each fragment
@@ -103,6 +108,8 @@ import android.widget.Toast;
     private static String reportConverUtm = "";
     private static String reportDistGeo = "";
     private static String reportDistUtm = "";
+    private static String reportAcimutDistance = "";
+    private static String reportCoordinateCompute = "";
     
 	public static String getReportGeoUtm() {
 		return reportGeoUtm;
@@ -168,8 +175,24 @@ import android.widget.Toast;
 		MainActivity.reportDistUtm = reportDistUtm;
 	}    
     
-	
-    //----- DATABASES
+    public static String getReportAcimutDistance() {
+		return reportAcimutDistance;
+	}
+
+	public static void setReportAcimutDistance(String reportAcimutDistance) {
+		MainActivity.reportAcimutDistance = reportAcimutDistance;
+	}
+
+	public static String getReportCoordinateCompute() {
+		return reportCoordinateCompute;
+	}
+
+	public static void setReportCoordinateCompute(String reportCoordinateCompute) {
+		MainActivity.reportCoordinateCompute = reportCoordinateCompute;
+	}
+
+
+	//----- DATABASES
 	ContentValues newEllipsoid = new ContentValues();
 	static SQLiteDatabase db;
 	
@@ -274,6 +297,12 @@ import android.widget.Toast;
             case 8:
                 fragmentManager.beginTransaction().replace(R.id.container, DistanceUtmFragment.newInstance()).commit();
                 break;
+            case 9:
+                fragmentManager.beginTransaction().replace(R.id.container, DistanceAcimuthFragment.newInstance()).commit();
+                break;
+            case 10:
+                fragmentManager.beginTransaction().replace(R.id.container, CoordinatesComputingFragment.newInstance()).commit();
+                break;
         }
 
         onSectionAttached(position);
@@ -300,6 +329,12 @@ import android.widget.Toast;
             case 8:
                 mTitle = getString(R.string.distancias);
                 break;
+            case 9:
+            	mTitle = getString(R.string.acimut_distancia);
+            break;
+            case 10:
+            	mTitle = getString(R.string.calculo_coordenadas);
+            break;            
         }
     }
 
@@ -551,6 +586,22 @@ import android.widget.Toast;
 							reportContent = reportDistUtm;
 						}
 						break;
+					case 9:
+						if(reportAcimutDistance.contentEquals("")){
+							Toast.makeText(getApplicationContext(), getString(R.string.no_calculos), Toast.LENGTH_SHORT).show();
+							btnInfoAccept.setEnabled(false);
+						} else{
+							reportContent = reportAcimutDistance;
+						}
+						break;
+					case 10:
+						if(reportCoordinateCompute.contentEquals("")){
+							Toast.makeText(getApplicationContext(), getString(R.string.no_calculos), Toast.LENGTH_SHORT).show();
+							btnInfoAccept.setEnabled(false);
+						} else{
+							reportContent = reportCoordinateCompute;
+						}
+						break;
 				}
 				
 				btnInfoCancel.setOnClickListener(new View.OnClickListener() {
@@ -683,7 +734,12 @@ import android.widget.Toast;
             case 8:
             	fm.beginTransaction().replace(R.id.container, DistanceUtmFragment.newInstance()).commit();
                 break;
-                
+            case 9:
+            	fm.beginTransaction().replace(R.id.container, DistanceAcimuthFragment.newInstance()).commit();
+                break;
+            case 10:
+            	fm.beginTransaction().replace(R.id.container, CoordinatesComputingFragment.newInstance()).commit();
+                break;
 			default:
 				fm.beginTransaction().replace(R.id.container, PresentationFragment.newInstance()).commit();
 			break;
@@ -840,6 +896,24 @@ import android.widget.Toast;
 			ArrayList<String> distUtmRedContainerArray) {
 		MainActivity.distUtmRedContainerArray = distUtmRedContainerArray;
 	}
+	
+	public static ArrayList<String> getAcimutDistanceContainerArray() {
+		return acimutDistanceContainerArray;
+	}
+
+	public static void setAcimutDistanceContainerArray(
+			ArrayList<String> acimutDistanceContainerArray) {
+		MainActivity.acimutDistanceContainerArray = acimutDistanceContainerArray;
+	}
+	
+	public static String getCoordinatesComputeContainer() {
+		return coordinatesComputeContainer;
+	}
+
+	public static void setCoordinatesComputeContainer(
+			String coordinatesComputeContainer) {
+		MainActivity.coordinatesComputeContainer = coordinatesComputeContainer;
+	}
 
 //----- FRAGMENTS AND OTHER CLASSES -------------------------------------------------------------------------------
     /*
@@ -847,6 +921,7 @@ import android.widget.Toast;
      *  DIALOGS
      *
      */
+
 
 	public static class DataBaseDialogFragment extends DialogFragment
     {
@@ -1020,6 +1095,18 @@ import android.widget.Toast;
 											returnValue = pointX + " " + pointY + " " + pointLandaMc + " " + hemisphere;
 											convergenceUtmContainerArray.add(returnValue);
 											fm.beginTransaction().replace(R.id.container, ConvergenceUtmFragment.newInstance()).commit();
+										break;
+										
+										case 9:
+											returnValue = pointX + " " + pointY + " " + pointLandaMc + " " + hemisphere;
+											acimutDistanceContainerArray.add(returnValue);
+											fm.beginTransaction().replace(R.id.container, DistanceAcimuthFragment.newInstance()).commit();
+										break;
+										
+										case 10:
+											returnValue = pointX + " " + pointY + " " + pointLandaMc + " " + hemisphere;
+											setCoordinatesComputeContainer(returnValue);
+											fm.beginTransaction().replace(R.id.container, CoordinatesComputingFragment.newInstance()).commit();
 										break;
 									}
                                     
@@ -1600,7 +1687,7 @@ import android.widget.Toast;
 
 
         //----- Variables
-        private ArrayList<String> paths = null; // Aqui se van almacenando las rutas
+        private ArrayList<String> paths = null; // In this variable the different paths are saved 
         private String root="/";
         private File navigatorFile;
 
@@ -1656,19 +1743,40 @@ import android.widget.Toast;
                             int wichFragment = MainActivity.getFRAGMENT_SELECTED();
                             
                             int documentLenght = 0;
-                            if(wichFragment < 7){
-	                            if(wichFragment%2 == 0){
-	                            	documentLenght = 4;
-	                            } else{
-	                            	documentLenght = 7;
-	                            }
-                            } else{
-                            	if(wichFragment%2 == 0){
-	                            	documentLenght = 6;
-	                            } else{
-	                            	documentLenght = 9;
-	                            }
-                            }
+                            
+                            switch (wichFragment) {
+								case 1:
+									documentLenght = 7;  // Geodetic coordinates list
+								break;
+								case 2:
+									documentLenght = 4;  // UTM coordinates list
+								break;
+								case 3:
+									documentLenght = 7;  // Geodetic coordinates list
+								break;
+								case 4:
+									documentLenght = 4;  // UTM coordinates list
+								break;
+								case 5:
+									documentLenght = 7;  // Geodetic coordinates list
+								break;
+								case 6:
+									documentLenght = 4;  // UTM coordinates list
+								break;
+								case 7:
+									documentLenght = 9;  // Geodetic coordinates list with distances
+								break;
+								case 8:
+									documentLenght = 6;  // UTM coordinates list with distances
+								break;
+								case 9:
+									documentLenght = 4;  // UTM coordinates list
+								break;
+								case 10:
+									documentLenght = 4;  // UTM coordinates list
+								break;
+							}
+                            
 
                             for(int i = 0; i < readData.size()-1; i++)
                             {
@@ -1767,6 +1875,11 @@ import android.widget.Toast;
 								case 8:
 									distUtmRedContainerArray.addAll(valuesToReturn);
 									fm.beginTransaction().replace(R.id.container, DistanceUtmFragment.newInstance()).commit();									
+								break;
+								
+								case 9:
+									acimutDistanceContainerArray.addAll(valuesToReturn);
+									fm.beginTransaction().replace(R.id.container, DistanceAcimuthFragment.newInstance()).commit();									
 								break;
 							}
                             
@@ -1906,6 +2019,260 @@ import android.widget.Toast;
         }
     }
 
+    public static class ComputeCoordinatesNavigatorDialogFragment extends DialogFragment
+    {
+        public ComputeCoordinatesNavigatorDialogFragment(){}
+
+        //----- Elements
+        ListView lstFoldersFiles;
+        ListView lstFoundedPoints;
+        Button btnCancel;
+        Button btnBack;
+        TextView txtCurrentRoot;
+
+
+        //----- Variables
+        private ArrayList<String> paths = null; // In this variable the different paths are saved 
+        private ArrayList<String> foundedPointsArray = new ArrayList<String>();
+        private String root="/";
+        private File navigatorFile;
+
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        {
+            View view = inflater.inflate(R.layout.view_comp_coord_file_navigator, container);
+            getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
+            lstFoldersFiles = (ListView) view.findViewById(R.id.listView1);
+            lstFoundedPoints = (ListView) view.findViewById(R.id.listView2);
+            btnCancel = (Button) view.findViewById(R.id.button1);
+            btnBack = (Button) view.findViewById(R.id.button2);
+            txtCurrentRoot = (TextView) view.findViewById(R.id.textView2);
+
+            getDir(root);
+
+            return view;
+        }
+
+        @Override
+        public void onActivityCreated(Bundle arg0)
+        {
+            // TODO Auto-generated method stub
+            super.onActivityCreated(arg0);
+
+            lstFoldersFiles.setOnItemClickListener(new OnItemClickListener()
+            {
+                @Override
+                public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3)
+                {
+                    navigatorFile = new File(paths.get(arg2));
+
+                    if(navigatorFile.isDirectory())
+                    {
+                        if(navigatorFile.canRead())
+                        {
+                            getDir(paths.get(arg2));
+                        }
+                        else
+                        {
+                            Toast.makeText(getActivity(), getString(R.string.accion_no_permitida), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    else
+                    {
+                        String typeFile = MimeTypeMap.getFileExtensionFromUrl(navigatorFile.getAbsolutePath());
+
+                        if(typeFile.contentEquals("txt"))
+                        {
+                            ArrayList<String> readData = readFile(navigatorFile.getAbsolutePath());
+                            int documentLenght = 4;
+
+                            for(int i = 0; i < readData.size()-1; i++)
+                            {
+                            	String lineElements[] = readData.get(i).split(" ");
+                            	
+                            	if(lineElements.length == documentLenght)
+                            	{
+                            		for(int j = 0; j < lineElements.length; j++)
+                            		{
+                            			try
+                            			{
+                        					Double.parseDouble(lineElements[0]);
+                            				Double.parseDouble(lineElements[1]);
+                            				Double.parseDouble(lineElements[2]);
+
+                            				if(lineElements[3].contentEquals("N") || lineElements[3].contentEquals("S")){
+                            					if(j == documentLenght-1){
+                            						foundedPointsArray.add(readData.get(i));
+	                            				}
+                            				} else{
+                            					Toast.makeText(getActivity(), getString(R.string.hemisferio_incorrecto_linea) + " " + (i+1), Toast.LENGTH_SHORT).show();
+                            				}
+                            			}catch(Exception e){
+                            				Toast.makeText(getActivity(), getString(R.string.valores_incorrecto_linea) + " " + (i+1), Toast.LENGTH_SHORT).show();
+                            				dismiss();
+                            			}                         			
+                            		}
+                            		
+                            		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, foundedPointsArray);
+                            		lstFoundedPoints.setAdapter(adapter);
+                            	}
+                            	else
+                            	{
+                            		Toast.makeText(getActivity(), getString(R.string.msg_valores_incorrectos) + " " + (i+1), Toast.LENGTH_SHORT).show();
+                            		dismiss();
+                            		break;
+                            	}
+                            }
+                        }
+                    }
+                }
+            });
+            
+            lstFoundedPoints.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					String selectedItem = lstFoundedPoints.getItemAtPosition(position).toString();
+	                setCoordinatesComputeContainer(selectedItem);
+	                FragmentManager fm = getActivity().getSupportFragmentManager();
+	                fm.beginTransaction().replace(R.id.container, CoordinatesComputingFragment.newInstance()).commit();
+	
+	                dismiss();
+					
+				}
+			});
+
+            btnCancel.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    dismiss();
+                }
+            });
+
+            btnBack.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    if(!navigatorFile.getAbsolutePath().toString().contentEquals(root))
+                    {
+                        navigatorFile = new File(navigatorFile.getParent());
+                        getDir(navigatorFile.getPath());
+                    }
+                }
+            });
+        }
+
+        private void getDir(String dirPath)
+        {
+            txtCurrentRoot.setText(getString(R.string.ruta_actual) + ": " + dirPath);
+
+            paths = new ArrayList<String>();
+            navigatorFile = new File(dirPath);
+            File files[] = navigatorFile.listFiles();
+            NavigatorModel[] items = new NavigatorModel[files.length];
+
+            for(int i = 0; i < files.length; i++)
+            {
+                File file = files[i];
+                paths.add(file.getPath());
+
+                items[i] = new NavigatorModel(file.isDirectory(), file.getAbsolutePath());
+            }
+
+            NavigatorAdapter adapter = new NavigatorAdapter(getActivity(), items);
+            lstFoldersFiles.setAdapter(adapter);
+        }
+
+        private ArrayList<String> readFile (String nombre)
+        {
+            File file = new File(nombre);
+            ArrayList<String> lines = new ArrayList<String>();
+
+            try
+            {
+                FileInputStream fIn = new FileInputStream(file);
+                InputStreamReader readerFile = new InputStreamReader(fIn);
+                BufferedReader br = new BufferedReader(readerFile);
+                String line = br.readLine();
+                lines.add(line);
+
+                while (line != null)
+                {
+                    line  = br.readLine();
+                    lines.add(line);
+                }
+
+                br.close();
+                readerFile.close();
+                return lines;
+            }
+            catch (Exception e)
+            {
+                e.getStackTrace();
+                return null;
+            }
+        }
+
+
+        private class NavigatorAdapter extends ArrayAdapter<NavigatorModel>
+        {
+            Activity contextActivity;
+            NavigatorModel[] fileList;
+
+            public NavigatorAdapter(Activity context, NavigatorModel[] fileList)
+            {
+                super(context, R.layout.adapter_view_file_navigator, fileList);
+                this.contextActivity = context;
+                this.fileList = fileList;
+            }
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent)
+            {
+                LayoutInflater inflater = contextActivity.getLayoutInflater();
+                View item = inflater.inflate(R.layout.adapter_view_file_navigator, null);
+
+                TextView lblTittle = (TextView) item.findViewById(R.id.textView1);
+                TextView lblSubTitle = (TextView) item.findViewById(R.id.textView2);
+                ImageView imageView = (ImageView)item.findViewById(R.id.imageView1);
+
+                boolean isDirectory = fileList[position].isDirectory();
+                String filePath = fileList[position].getName();
+                File file = new File(filePath);
+
+                String nameItem = file.getName();
+                String typeItem = MimeTypeMap.getFileExtensionFromUrl(filePath);
+
+                lblTittle.setText(nameItem.toUpperCase());
+                if(isDirectory)
+                {
+                    imageView.setImageResource(R.drawable.ic_carpeta);
+                    lblSubTitle.setText(getString(R.string.carpeta));
+                }
+                else
+                {
+                    if(typeItem.contentEquals("txt"))
+                    {
+                        imageView.setImageResource(R.drawable.ic_archivo);
+                        lblSubTitle.setText(getString(R.string.archivo_texto));
+                    }
+                    else
+                    {
+                        imageView.setImageResource(R.drawable.ic_desconocido);
+                        lblSubTitle.setText(getString(R.string.archivo_desconocido));
+                    }
+                }
+
+
+                return item;
+            }
+        }
+    }
+    
     
     /**
      *
@@ -1976,7 +2343,9 @@ import android.widget.Toast;
                                     new SideBarModel(getString(R.string.convergencia), getString(R.string.coordenadas_geodesicas)),
                                     new SideBarModel(getString(R.string.convergencia), getString(R.string.coordenadas_utm)),
                                     new SideBarModel(getString(R.string.distancias), getString(R.string.reducida_utm)),
-                                    new SideBarModel(getString(R.string.distancias), getString(R.string.utm_reducida))
+                                    new SideBarModel(getString(R.string.distancias), getString(R.string.utm_reducida)),
+                                    new SideBarModel(getString(R.string.acimut_distancia), getString(R.string.coordenadas_utm)),
+                                    new SideBarModel(getString(R.string.calculo_coordenadas), getString(R.string.coordenadas_utm))
                             };
                     SideListAdapter adapter = new SideListAdapter(presentationActivity, toolsList);
                     lstExamples.setAdapter(adapter);
@@ -2009,11 +2378,20 @@ import android.widget.Toast;
                         							"42 45 50.98128 -7 46 20.42868 -9 1550 1060" + "\n" +
                         							"41 52 14.90617 2 19 15.12492 3 675 650" + "\n" + 
                         							"28 6 35.03998 -17 14 54.06175 -15 80 825";
-                        		} else{
+                        		} 
+                        		
+                        		if(position == 8){
                         			content = "496347.299 4396688.075 -3 N 5000 825" + "\n" +
                         							"600446.903 4735356.582 -9 N 2350 250" + "\n" +
                         							"443642.136 4635655.192 3 N 1000 75" + "\n" + 
                         							"279129.108 3111400.684 -15 N 275 525";
+                        		}
+                        		
+                        		if(position == 9 || position == 10){
+                        			content = "496347.299 4396688.075 -3 N" + "\n" +
+                							"600446.903 4735356.582 -9 N" + "\n" +
+                							"443642.136 4635655.192 3 N" + "\n" + 
+                							"279129.108 3111400.684 -15 N";
                         		}
                         	}
                         	
@@ -4432,4 +4810,490 @@ import android.widget.Toast;
             lstCalculatedPoints.setAdapter(adapter);
         }
     }
+    
+    
+    
+    /**
+    *
+    *
+    * Distance and Azimuth computing Fragment
+    *
+    * **/
+
+   public static class DistanceAcimuthFragment extends Fragment
+   {
+       //----- View elements declaration
+	   Activity thisFragmentActivity;
+       View rootView;
+       TextView txtToolTitle;
+       Button btnFromFile;
+       Button btnInputCoordinate;
+       ListView lstAddedCoordinates;
+       Spinner spnEllipsoids;
+       TextView txtAnamorphosis;
+       Spinner spnAnamorphosis;
+       Button btnCalculate;
+       Button btnDeleteAll;
+       ListView lstCalculatedPoints;
+       
+       
+       //----- Variables declaration
+       String hemisphere = "N";
+       ArrayList<String> addedPointsArrayList =  new ArrayList<String>();
+       ArrayList<String> calculatedValuesArray = new ArrayList<String>();
+       MainActivity object = new MainActivity();
+       Funciones functions = new Funciones();
+       DecimalFormat format = new DecimalFormat("0.000");
+       
+
+       public static DistanceAcimuthFragment newInstance()
+       {
+    	   DistanceAcimuthFragment fragment = new DistanceAcimuthFragment();
+           return fragment;
+       }
+
+       public DistanceAcimuthFragment(){};
+
+       @Override
+       public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+       {
+    	   MainActivity.setFRAGMENT_SELECTED(AZIMUT_DISTANCE_FRAGMENT);
+       	
+           rootView = inflater.inflate(R.layout.fragment_acimut_distance, container, false);
+           txtToolTitle = (TextView) rootView.findViewById(R.id.textView7);
+           btnFromFile = (Button) rootView.findViewById(R.id.button3);
+           btnInputCoordinate = (Button) rootView.findViewById(R.id.button4);
+           lstAddedCoordinates = (ListView) rootView.findViewById(R.id.listView1);
+           txtAnamorphosis = (TextView) rootView.findViewById(R.id.textView6);
+           spnEllipsoids = (Spinner) rootView.findViewById(R.id.spinner1);
+           spnAnamorphosis = (Spinner) rootView.findViewById(R.id.spinner2);
+           btnDeleteAll = (Button) rootView.findViewById(R.id.button1);
+           btnCalculate = (Button) rootView.findViewById(R.id.button2);
+           lstCalculatedPoints = (ListView) rootView.findViewById(R.id.listView2);
+           
+           
+           return rootView;
+       }
+
+       @Override
+       public void onActivityCreated(Bundle savedInstanceState)
+       {
+           super.onActivityCreated(savedInstanceState);
+           
+           addedPointsArrayList.addAll(getAcimutDistanceContainerArray());
+           if(!addedPointsArrayList.isEmpty()){
+           	refreshAddedCoordinatesList(addedPointsArrayList, lstAddedCoordinates);
+           }
+           
+           thisFragmentActivity = getActivity();
+           object.refreshAnamorphosisSpinner(spnAnamorphosis, thisFragmentActivity);
+           object.refreshEllipsoidsSpinner(spnEllipsoids, thisFragmentActivity);
+           
+           lstAddedCoordinates.setOnItemLongClickListener(new OnItemLongClickListener() {
+				@Override
+				public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+					addedPointsArrayList.remove(position);
+					setAcimutDistanceContainerArray(addedPointsArrayList);
+					refreshAddedCoordinatesList(addedPointsArrayList, lstAddedCoordinates);
+					return false;
+				}
+			});
+           
+           btnInputCoordinate.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+                   AlertDialog.Builder builder =  new AlertDialog.Builder(getActivity());
+                   LayoutInflater inflater = getActivity().getLayoutInflater();
+                   View layout = inflater.inflate(R.layout.view_input_utm_coordinate, null);
+                   builder.setView(layout);
+                   final AlertDialog inputCoordinateDialog = builder.create();
+                   
+                   final RadioGroup rgHemispheres = (RadioGroup) layout.findViewById(R.id.radioGroup1);
+                   final EditText txtXcoordinate = (EditText) layout.findViewById(R.id.editText1);
+                   final EditText txtYcoordinate = (EditText) layout.findViewById(R.id.editText2);
+                   final EditText txtLongitudeMc = (EditText) layout.findViewById(R.id.editText7);
+
+                   Button btnCancel = (Button) layout.findViewById(R.id.button1);
+                   Button btnAccept = (Button) layout.findViewById(R.id.button2);
+                   
+                   rgHemispheres.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+						@Override
+						public void onCheckedChanged(RadioGroup group, int checkedId) {
+							switch (checkedId) {
+								case R.id.radio0:
+									hemisphere = "N";
+									break;
+								case R.id.radio1:
+									hemisphere = "S";
+									break;
+							}
+						}
+					});
+                   
+                   btnCancel.setOnClickListener(new View.OnClickListener()
+                   {
+                       @Override
+                       public void onClick(View v)
+                       {
+                           inputCoordinateDialog.dismiss();
+                       }
+                   });
+
+                   btnAccept.setOnClickListener(new View.OnClickListener()
+                   {
+                       @Override
+                       public void onClick(View v)
+                       {
+                           String strXcoordinate = txtXcoordinate.getText().toString();
+                           String strYcoordinate = txtYcoordinate.getText().toString();
+                           String strLongitudeMc = txtLongitudeMc.getText().toString();
+
+                           if(strXcoordinate.contentEquals("") || strYcoordinate.contentEquals("") || strLongitudeMc.contentEquals(""))
+                           {
+                               Toast.makeText(getActivity(), getText(R.string.no_valores_vacios), Toast.LENGTH_SHORT).show();
+                           }
+                           else
+                           {
+                               addedPointsArrayList.add(strXcoordinate + " " + strYcoordinate + " " + strLongitudeMc + " " + hemisphere);
+                               setAcimutDistanceContainerArray(addedPointsArrayList);
+                               refreshAddedCoordinatesList(addedPointsArrayList, lstAddedCoordinates);
+
+                               inputCoordinateDialog.dismiss();
+                           }
+                       }
+                   });
+
+                   inputCoordinateDialog.show();
+				}
+			});
+
+           btnFromFile.setOnClickListener(new View.OnClickListener()
+           {
+               @Override
+               public void onClick(View arg0)
+               {
+                   AlertDialog.Builder builder =  new AlertDialog.Builder(getActivity());
+                   builder.setMessage(getString(R.string.Selecciona_fuente));
+
+                   builder.setPositiveButton(getString(R.string.base_datos), new DialogInterface.OnClickListener()
+                   {
+                       @Override
+                       public void onClick(DialogInterface dialog, int which) {
+                    	   setAcimutDistanceContainerArray(addedPointsArrayList);
+                       	
+                           DataBaseDialogFragment dbFragment = new DataBaseDialogFragment();
+                           dbFragment.show(getFragmentManager(), "DataBaseFragment");
+                       }
+                   });
+
+                   builder.setNegativeButton(getString(R.string.fichero_de_texto), new DialogInterface.OnClickListener()
+                   {
+                       public void onClick(DialogInterface dialog, int which) {
+                    	   setAcimutDistanceContainerArray(addedPointsArrayList);
+                       	
+                           NavigatorDialogFragment dialogFragment =  new NavigatorDialogFragment();
+                           dialogFragment.show(getFragmentManager(), "NavigatorDialog");
+                       }
+                   });
+
+                   final AlertDialog alertDialog = builder.create();
+                   alertDialog.show();
+               }
+           });
+           
+           btnDeleteAll.setOnClickListener(new View.OnClickListener()
+           {
+               @Override
+               public void onClick(View v)
+               {
+            	   calculatedValuesArray.clear();
+                   addedPointsArrayList.clear();
+                   setAcimutDistanceContainerArray(addedPointsArrayList);
+                   refreshAddedCoordinatesList(addedPointsArrayList, lstAddedCoordinates);
+                   refreshCoordinatesList(addedPointsArrayList, lstCalculatedPoints);
+               }
+           });
+           
+           btnCalculate.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if(lstAddedCoordinates.getCount() == 2){
+					   	String ellipsoidValues[] = spnEllipsoids.getSelectedItem().toString().split(" ");
+		               	double a = Double.parseDouble(ellipsoidValues[1]);
+		               	double f = Double.parseDouble(ellipsoidValues[2]);
+		   				double e = 2*(1/f) - Math.pow((1/f), 2);
+		   				
+		   				
+		               	String anamorphosisValue[] = spnAnamorphosis.getSelectedItem().toString().split(" ");
+		               	double ko = Double.parseDouble(anamorphosisValue[1]);
+		               	
+	               	
+		               	//----- Computations
+		               	String valuesStation[] = addedPointsArrayList.get(0).split(" ");
+		               	String valuesObserved[] = addedPointsArrayList.get(1).split(" ");
+		               	double xStation = Double.parseDouble(valuesStation[0]);
+		               	double yStation = Double.parseDouble(valuesStation[1]);
+		               	double xObserved = Double.parseDouble(valuesObserved[0]);
+		               	double yObserved = Double.parseDouble(valuesObserved[1]);
+		               	
+		               	double cartographicAzimut = functions.acimut(xStation, yStation, xObserved, yObserved, 180);
+		               	double utmDistance = functions.distancia(xStation, yStation, xObserved, yObserved);
+		               	
+		               	double geodeticDist = functions.reduccionDistanciaCuerda(utmDistance, cartographicAzimut, xStation, yStation, a, e, f, ko, hemisphere);
+		               	double geodeticAz = functions.calculoAcimutGeodesico(cartographicAzimut, xStation, yStation, xObserved, yObserved, a, f, e, ko, hemisphere);
+		               	
+		               	String strCartAz = functions.pasar_a_sexa(cartographicAzimut);
+		               	String strGeodAz = functions.pasar_a_sexa(geodeticAz);
+		               	String strUtmDistance = format.format(utmDistance) + "m";
+		               	String strGeodDistance = format.format(geodeticDist) + "m";
+		               	
+		               	calculatedValuesArray.add(0, strCartAz + " " + strUtmDistance + " " + strGeodAz + " " + strGeodDistance);
+		               	refreshCoordinatesList(calculatedValuesArray, lstCalculatedPoints);
+		               	
+		               	reportData(calculatedValuesArray);
+					} else{
+						Toast.makeText(getActivity(), getString(R.string.msg_dos_puntos), Toast.LENGTH_SHORT).show();
+					}
+				}
+			});
+       }
+       
+       public void reportData(ArrayList<String> calculatedCoordinates){
+    	   String title = getString(R.string.acimut_distancia) + " - " + getString(R.string.valores_calculados);
+    	   String value = getString(R.string.resultado);
+    	   
+			String returnValue = "";
+			for(int i = 0; i < calculatedCoordinates.size(); i++){
+				returnValue = returnValue + value + (i+1) + ": " + calculatedCoordinates.get(i) + "\n";
+			}
+			
+			setReportAcimutDistance(title + "\n" + "\n" + returnValue);
+       }
+       
+       //----- METHODS AND SUBROUTINES
+       public void refreshCoordinatesList(ArrayList<String> arrayList, ListView listView){
+	       	ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, arrayList);
+	       	listView.setAdapter(adapter);
+       }
+       
+       public void refreshAddedCoordinatesList(ArrayList<String> arrayList, ListView listView){
+	       	ArrayList<String> formattedElementsArrayList = new ArrayList<String>();
+	       	for(int i = 0; i < arrayList.size(); i++){
+	       		String elements[] = arrayList.get(i).split(" ");
+	       		formattedElementsArrayList.add(elements[0] + "m " + elements[1] + "m " + elements[2] + "º " + elements[3]);
+	       	}
+	       	
+	       	ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, formattedElementsArrayList);
+	       	listView.setAdapter(adapter);
+       }
+   }
+   
+   
+   /**
+   *
+   *
+   * Distance and Azimuth computing Fragment
+   *
+   * **/
+
+  public static class CoordinatesComputingFragment extends Fragment
+  {
+      //----- View elements declaration
+	  Activity thisFragmentActivity;
+      View rootView;
+      
+      RadioGroup rgHemispheres;
+      RadioButton rButton1;
+      RadioButton rButton2;
+      EditText edtEastingX;
+      EditText edtNortingY;
+      TextView txtFromFile;
+      EditText edtAzimutGrades;
+      EditText edtAzimutMinutes;
+      EditText edtAzimutSecconds;
+      EditText edtDistance;
+
+      Spinner spnEllipsoids;
+      Spinner spnAnamorphosis;
+      Button btnCalculate;
+      Button btnDeleteAll;
+      ListView lstCalculatedPoints;
+      
+      
+      //----- Variables declaration
+      String hemisphere = "N";
+      ArrayList<String> addedPointsArrayList =  new ArrayList<String>();
+      ArrayList<String> calculatedValuesArray = new ArrayList<String>();
+      MainActivity object = new MainActivity();
+      Funciones functions = new Funciones();
+      DecimalFormat format = new DecimalFormat("0.000");
+      
+
+      public static CoordinatesComputingFragment newInstance()
+      {
+    	  CoordinatesComputingFragment fragment = new CoordinatesComputingFragment();
+          return fragment;
+      }
+
+      public CoordinatesComputingFragment(){};
+
+      @Override
+      public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+      {
+    	  MainActivity.setFRAGMENT_SELECTED(COORDINATE_COMPUTE_FRAGMENT);
+      	
+          rootView = inflater.inflate(R.layout.fragment_coordinates_computing, container, false);
+          
+          rgHemispheres = (RadioGroup) rootView.findViewById(R.id.radioGroup1);
+          rButton1 = (RadioButton) rootView.findViewById(R.id.radio0);
+          rButton2 = (RadioButton) rootView.findViewById(R.id.radio1);
+          edtEastingX = (EditText) rootView.findViewById(R.id.editText1);
+          edtNortingY = (EditText) rootView.findViewById(R.id.editText2);
+          txtFromFile = (TextView) rootView.findViewById(R.id.textView1);
+          edtAzimutGrades = (EditText) rootView.findViewById(R.id.editText3);
+          edtAzimutMinutes = (EditText) rootView.findViewById(R.id.editText4);
+          edtAzimutSecconds = (EditText) rootView.findViewById(R.id.editText5);
+          edtDistance = (EditText) rootView.findViewById(R.id.editText6);
+          spnEllipsoids = (Spinner) rootView.findViewById(R.id.spinner1);
+          spnAnamorphosis = (Spinner) rootView.findViewById(R.id.spinner2);
+          btnDeleteAll = (Button) rootView.findViewById(R.id.button1);
+          btnCalculate = (Button) rootView.findViewById(R.id.button2);
+          lstCalculatedPoints = (ListView) rootView.findViewById(R.id.listView1);
+          
+          
+          return rootView;
+      }
+
+      @Override
+      public void onActivityCreated(Bundle savedInstanceState)
+      {
+          super.onActivityCreated(savedInstanceState);
+          
+          String receivedCoordinates = getCoordinatesComputeContainer();
+          if(!receivedCoordinates.contentEquals("")){
+        	  String values[] = receivedCoordinates.split(" ");
+        	  edtEastingX.setText(values[0]);
+        	  edtNortingY.setText(values[1]);
+        	  
+        	  String receivedHemisphere = values[3];
+        	  hemisphere = receivedHemisphere;
+        	  if(hemisphere.contentEquals("N")){
+        		  rButton1.setChecked(true);
+        		  rButton2.setChecked(false);
+        	  } else{
+        		  rButton1.setChecked(false);
+        		  rButton2.setChecked(true);        		  
+        	  }
+        	  
+          }
+          
+          thisFragmentActivity = getActivity();
+          object.refreshAnamorphosisSpinner(spnAnamorphosis, thisFragmentActivity);
+          object.refreshEllipsoidsSpinner(spnEllipsoids, thisFragmentActivity);
+          
+          rgHemispheres.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				switch (checkedId) {
+					case R.id.radio0:
+						hemisphere = "N";
+					break;
+					case R.id.radio1:
+						hemisphere = "S";
+					break;
+				}
+				
+			}
+		});
+          
+          txtFromFile.setOnClickListener(new View.OnClickListener()
+          {
+              @Override
+              public void onClick(View arg0)
+              {
+                  AlertDialog.Builder builder =  new AlertDialog.Builder(getActivity());
+                  builder.setMessage(getString(R.string.Selecciona_fuente));
+
+                  builder.setPositiveButton(getString(R.string.base_datos), new DialogInterface.OnClickListener()
+                  {
+                      @Override
+                      public void onClick(DialogInterface dialog, int which) {
+                          DataBaseDialogFragment dbFragment = new DataBaseDialogFragment();
+                          dbFragment.show(getFragmentManager(), "DataBaseFragment");
+                      }
+                  });
+
+                  builder.setNegativeButton(getString(R.string.fichero_de_texto), new DialogInterface.OnClickListener()
+                  {
+                      public void onClick(DialogInterface dialog, int which) {
+                          ComputeCoordinatesNavigatorDialogFragment dialogFragment =  new ComputeCoordinatesNavigatorDialogFragment();
+                          dialogFragment.show(getFragmentManager(), "NavigatorDialog");
+                      }
+                  });
+
+                  final AlertDialog alertDialog = builder.create();
+                  alertDialog.show();
+              }
+          });
+          
+          btnDeleteAll.setOnClickListener(new View.OnClickListener()
+          {
+              @Override
+              public void onClick(View v)
+              {
+            	  calculatedValuesArray.clear();
+                  refreshCoordinatesList(calculatedValuesArray, lstCalculatedPoints);
+              }
+          });
+          
+          btnCalculate.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+
+				   	String ellipsoidValues[] = spnEllipsoids.getSelectedItem().toString().split(" ");
+	               	double a = Double.parseDouble(ellipsoidValues[1]);
+	               	double f = Double.parseDouble(ellipsoidValues[2]);
+	   				double e = 2*(1/f) - Math.pow((1/f), 2);
+	   				
+	   				
+	               	String anamorphosisValue[] = spnAnamorphosis.getSelectedItem().toString().split(" ");
+	               	double ko = Double.parseDouble(anamorphosisValue[1]);
+	               	
+               	
+	               	//----- Computations
+		               	
+
+				}
+			});
+      }
+      
+      public void reportData(ArrayList<String> calculatedCoordinates){
+   	   String title = getString(R.string.coordenadas_calculadas);
+   	   String value = getString(R.string.resultado);
+   	   
+			String returnValue = "";
+			for(int i = 0; i < calculatedCoordinates.size(); i++){
+				returnValue = returnValue + value + (i+1) + ": " + calculatedCoordinates.get(i) + "\n";
+			}
+			
+			setReportAcimutDistance(title + "\n" + "\n" + returnValue);
+      }
+      
+      //----- METHODS AND SUBROUTINES
+      public void refreshCoordinatesList(ArrayList<String> arrayList, ListView listView){
+	       	ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, arrayList);
+	       	listView.setAdapter(adapter);
+      }
+      
+      public void refreshAddedCoordinatesList(ArrayList<String> arrayList, ListView listView){
+	       	ArrayList<String> formattedElementsArrayList = new ArrayList<String>();
+	       	for(int i = 0; i < arrayList.size(); i++){
+	       		String elements[] = arrayList.get(i).split(" ");
+	       		formattedElementsArrayList.add(elements[0] + "m " + elements[1] + "m " + elements[2] + "º " + elements[3]);
+	       	}
+	       	
+	       	ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, formattedElementsArrayList);
+	       	listView.setAdapter(adapter);
+      }
+  }
 }

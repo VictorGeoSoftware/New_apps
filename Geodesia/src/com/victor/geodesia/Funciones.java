@@ -614,4 +614,55 @@ public class Funciones
     	setCalculoUtmReducida(phiPrima + " " + phi + " " + ro + " " + N + " " + radioEsferaLocal + " " + K + " " + D2 + " " + R + " " + distanciaReducida);
     	return distanciaReducida;
     }
+    
+    public double reduccionDistanciaCuerda(double dCart, double azCartSexa, double X, double Y, double a, double e, double f, double ko, String hemisferio){
+    	double dGeodesica = 0;
+    	double azCart = azCartSexa*Math.PI/180;
+    	
+    	double phiPrima = problema_inverso_phi(a, e, f, X, Y, 0.0000, ko, hemisferio);
+    	double phi = problema_inverso_phi_absoluta(a, e, f, X, Y, phiPrima, ko);
+    	
+    	double x = (X - 500000)/ko;
+    	double ro = (a*(1 - e))/(Math.pow((1 - e*Math.pow(Math.sin(phi), 2)), 3/2));
+    	double N = a/Math.pow((1-e*Math.pow(Math.sin(phi),2)),0.5);
+    	double K = anamorfosisLinealUtm(a, f, e, X, Y, 0.0000, ko, hemisferio);
+    	
+    	dGeodesica = dCart + (1/24)*Math.pow(((x*Math.cos(azCart))/(ro*N*Math.pow(K, 2))), 2)*Math.pow(dCart, 3);
+    	
+    	return dGeodesica;
+    }
+    
+    public double calculoAcimutGeodesico(double acimutCartografico, double xEst, double yEst, double xVis, double yVis, 
+    										double a, double f, double e, double ko, String hemisferio){
+    	double acimutGeodesico = 0;
+    	
+    	double phiPrima = problema_inverso_phi(a, e, f, xEst, yEst, 0.0000, ko, hemisferio);
+    	double phi = problema_inverso_phi_absoluta(a, e, f, xEst, yEst, phiPrima, ko);
+    	
+    	double xE = (xEst - 500000)/ko;
+    	double xV = (xVis - 500000)/ko;
+    	double yE = 0;
+    	double yV = 0;
+    	if(hemisferio.contentEquals("S")){
+    		yE = (yEst - 10000000)/ko;
+    		yV = (yVis - 10000000)/ko;
+    	} else{
+        	yE = yEst/ko;
+        	yV = yVis/ko;    		
+    	}
+    	
+    	double b = (a*f-a)/f;
+        double e_prima_cuadrado = (a*a-b*b)/(b*b);
+        double n_cuadrado = e_prima_cuadrado*Math.pow(Math.cos(phi),2);
+    	double N = a/Math.pow((1-e*Math.pow(Math.sin(phi),2)),0.5);
+    	double ro = (a*(1 - e))/(Math.pow((1 - e*Math.pow(Math.sin(phi), 2)), 3/2));
+    	
+    	double dTab = ((yV - yE)*(2*xE + xV)*(1 + n_cuadrado))/(6*N*ro);
+    	double azCg = acimutCartografico + dTab;
+    	
+    	double convergencia = convergenciameridianosUtm(a, f, e, xE, yE, 0.0000, ko, hemisferio);
+    	acimutGeodesico = azCg + convergencia;
+    	
+    	return acimutGeodesico;
+    }
 }
